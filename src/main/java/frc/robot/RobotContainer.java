@@ -20,6 +20,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
+    private final Joystick mechOperator = new Joystick(1);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -30,8 +31,16 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
+    //Mechanism Operator Buttons
+    private final JoystickButton setL1 = new JoystickButton(mechOperator, XboxController.Button.kA.value);
+    private final JoystickButton setL2 = new JoystickButton(mechOperator, XboxController.Button.kY.value);
+    private final JoystickButton setL3 = new JoystickButton(mechOperator, XboxController.Button.kX.value);
+    private final JoystickButton setShelf = new JoystickButton(mechOperator, XboxController.Button.kB.value);
+    private final JoystickButton setStow = new JoystickButton(mechOperator, XboxController.Button.kLeftBumper.value);
+
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    private final Arm s_Arm = new Arm();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -59,6 +68,14 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+
+        //Mech operator bindings
+        setL1.onTrue(new InstantCommand(() -> s_Arm.setL1()));
+        setL2.onTrue(new InstantCommand(() -> s_Arm.setL2()));
+        setL3.onTrue(new InstantCommand(() -> s_Arm.setL3()));
+        setShelf.onTrue(new InstantCommand(() -> s_Arm.setShelf()));
+        setStow.onTrue(new InstantCommand(() -> s_Arm.stow()));
+
     }
 
     /**
