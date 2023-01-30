@@ -27,6 +27,19 @@ public final class Constants {
         public static final int gearRatio = 162/1; 
     }
 
+    public static final class Wrist {
+        //PID Constants
+         public static final double kP = 0.03;
+         public static final double kI = 0.00;
+         public static final double kD = 0.00;
+ 
+         //Feedfoward Constants
+         public static final double kS = 0.00;
+         public static final double kG = 0.00;
+         public static final double kV = 0.00;
+ 
+    }
+
     public static final class Swerve {
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 
