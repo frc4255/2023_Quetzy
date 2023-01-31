@@ -9,6 +9,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.autos.*;
 import frc.robot.commands.*;
+import frc.robot.commands.Arm.HighArm;
+import frc.robot.commands.Arm.LowArm;
+import frc.robot.commands.Arm.MidArm;
+import frc.robot.commands.Arm.ShelfArm;
+import frc.robot.commands.Arm.StowArm;
 import frc.robot.subsystems.*;
 
 /**
@@ -41,6 +46,7 @@ public class RobotContainer {
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Arm s_Arm = new Arm();
+    private final Wrist s_Wrist = new Wrist();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -70,12 +76,12 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
 
         //Mech operator bindings
-        setL1.onTrue(new InstantCommand(() -> s_Arm.setL1()));
-        setL2.onTrue(new InstantCommand(() -> s_Arm.setL2()));
-        setL3.onTrue(new InstantCommand(() -> s_Arm.setL3()));
-        setShelf.onTrue(new InstantCommand(() -> s_Arm.setShelf()));
-        setStow.onTrue(new InstantCommand(() -> s_Arm.stow()));
-
+        setL1.onTrue(new LowArm(s_Arm, s_Wrist));
+        setL2.onTrue(new MidArm(s_Arm, s_Wrist));
+        setL3.onTrue(new HighArm(s_Arm, s_Wrist));
+        setShelf.onTrue(new ShelfArm(s_Arm, s_Wrist));
+        setStow.onTrue(new StowArm(s_Arm, s_Wrist));
+        
     }
 
     /**

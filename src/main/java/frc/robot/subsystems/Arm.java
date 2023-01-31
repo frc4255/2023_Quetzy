@@ -127,6 +127,10 @@ public class Arm extends SubsystemBase {
     moveToPos(armPositions.STOW);
   }
 
+  public void resetPID() {
+    pid.reset();  
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
