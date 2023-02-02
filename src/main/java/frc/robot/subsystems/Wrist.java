@@ -60,6 +60,14 @@ public class Wrist extends SubsystemBase {
     encoder.reset();
   }
 
+  public void moveUp() {
+    motor.set(ControlMode.PercentOutput, 50.0);
+  }
+
+  public void moveDown() {
+    motor.set(ControlMode.PercentOutput, -50.0);
+  }
+
   public void stop() {
     motor.set(ControlMode.PercentOutput, 0.0);
   }

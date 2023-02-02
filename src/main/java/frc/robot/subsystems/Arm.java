@@ -56,10 +56,22 @@ public class Arm extends SubsystemBase {
 
     motor1 = new WPI_TalonFX(40); // TODO: Update Motor ID
     motor2 = new WPI_TalonFX(41); // TODO: Update Motor ID
+
+    //Refractor code to have motor2 follow motor1
   }
 
   public void reset() {
     encoder.reset();
+  }
+
+  public void moveUp() {
+    motor1.set(ControlMode.PercentOutput, 50.0);
+    motor2.set(ControlMode.PercentOutput, 50.0);
+  }
+
+  public void moveDown() {
+    motor1.set(ControlMode.PercentOutput, -50.0);
+    motor2.set(ControlMode.PercentOutput, -50.0);
   }
 
   public void stop() {
