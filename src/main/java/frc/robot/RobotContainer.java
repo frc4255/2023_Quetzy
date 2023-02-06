@@ -1,11 +1,15 @@
 package frc.robot;
 
+import com.ctre.phoenix.platform.can.AutocacheState;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.autos.*;
 import frc.robot.commands.*;
@@ -51,6 +55,7 @@ public class RobotContainer {
     private final Wrist s_Wrist = new Wrist();
     private final Intake s_Intake = new Intake();
 
+    private SendableChooser<Command> autoChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -66,6 +71,7 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+        configAutoChooser();
     }
 
     /**
@@ -86,6 +92,14 @@ public class RobotContainer {
         setShelf.onTrue(new ShelfArm(s_Arm, s_Wrist));
         setStow.onTrue(new StowArm(s_Arm, s_Wrist));
         
+    }
+
+    private void configAutoChooser() {
+        autoChooser = new SendableChooser<>();
+        autoChooser.setDefaultOption("Do Nothing", null); //TODO: Create Do Nothing auto object
+        autoChooser.setDefaultOption("Test path", new testPath(s_Swerve, s_Intake));
+        autoChooser.addOption("L3 Link", null); //TODO: Create L3 Link Class/Object
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     /**
