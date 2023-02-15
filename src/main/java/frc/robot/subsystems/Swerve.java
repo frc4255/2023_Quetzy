@@ -117,15 +117,8 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    public Command followTrajectoryCommand(PathPlannerTrajectory traj, boolean isFirstPath) {
-        return new SequentialCommandGroup(
-             new InstantCommand(() -> {
-               // Reset odometry for the first path you run during auto
-               if(isFirstPath){
-                   this.resetOdometry(traj.getInitialHolonomicPose());
-               }
-             }),
-             new PPSwerveControllerCommand(
+    public PPSwerveControllerCommand followTrajectoryCommand(PathPlannerTrajectory traj) {
+            return new PPSwerveControllerCommand(
                  traj, 
                  this::getPose, // Pose supplier
                  Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
@@ -135,8 +128,7 @@ public class Swerve extends SubsystemBase {
                  this::setModuleStates, // Module states consumer
                  true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
                  this // Requires this drive subsystem
-             )
-         );
+            );
      }
 
     @Override

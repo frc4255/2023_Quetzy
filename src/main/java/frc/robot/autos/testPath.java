@@ -1,6 +1,7 @@
 package frc.robot.autos;
 
 import frc.robot.Constants;
+import frc.robot.autos.autoCommands.followTrajectoryCommand;
 import frc.robot.subsystems.*;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -31,15 +33,17 @@ public class testPath extends SequentialCommandGroup {
 
         this.s_intake = s_intake;
         this.s_swerve = s_swerve;
-        PathPlannerTrajectory path1 = PathPlanner.loadPath("Test1", 4, 3);
-        PathPlannerTrajectory path2 = PathPlanner.loadPath("Test2", 4, 3);
+        PathPlannerTrajectory path1 = PathPlanner.loadPath("Test1", 1, 1);
+        PathPlannerTrajectory path2 = PathPlanner.loadPath("Test2", 1, 1);
 
-        addRequirements(s_swerve, s_intake);
+        PPSwerveControllerCommand follow1 = s_Swerve.followTrajectoryCommand(path1);
+        PPSwerveControllerCommand follow2 = s_Swerve.followTrajectoryCommand(path2);
 
         addCommands(
             new InstantCommand(() -> s_Swerve.zeroGyro()),
-            new InstantCommand(() -> s_Swerve.followTrajectoryCommand(path1, true)),
-            new InstantCommand(() -> s_Swerve.followTrajectoryCommand(path2, false))
+            new InstantCommand(() -> s_Swerve.resetOdometry(path1.getInitialHolonomicPose())),
+            follow1,
+            follow2
         );
     }
 }
