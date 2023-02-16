@@ -1,11 +1,13 @@
 package frc.robot.subsystems;
 
 import java.util.HashMap;
+import java.lang.Math;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -54,24 +56,14 @@ public class Arm extends SubsystemBase {
     pid = new PIDController(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD);
     feedforward = new ArmFeedforward(Constants.Arm.kS, Constants.Arm.kG, Constants.Arm.kV);
 
-    motor1 = new WPI_TalonFX(40); // TODO: Update Motor ID
-    motor2 = new WPI_TalonFX(41); // TODO: Update Motor ID
-
-    //Refractor code to have motor2 follow motor1
+    motor1 = new WPI_TalonFX(20); // TODO: Update Motor ID
+    motor2 = new WPI_TalonFX(21); // TODO: Update Motor ID
+    motor1.setNeutralMode(NeutralMode.Brake);
+    motor2.setNeutralMode(NeutralMode.Brake);
   }
 
   public void reset() {
     encoder.reset();
-  }
-
-  public void moveUp() {
-    motor1.set(ControlMode.PercentOutput, 50.0);
-    motor2.set(ControlMode.PercentOutput, 50.0);
-  }
-
-  public void moveDown() {
-    motor1.set(ControlMode.PercentOutput, -50.0);
-    motor2.set(ControlMode.PercentOutput, -50.0);
   }
 
   public void stop() {
@@ -79,6 +71,9 @@ public class Arm extends SubsystemBase {
     motor2.set(ControlMode.PercentOutput, 0.0);
   }
 
+  private double getPosInRadians() {
+   return encoder.getAbsolutePosition() * 2 * Math.PI;
+  }
   private void moveToPos(armPositions pos) {
     switch (pos) {
       case LOW:
@@ -102,8 +97,8 @@ public class Arm extends SubsystemBase {
       return;
     }
 
-    motor1.setVoltage(pid.calculate(encoder.getDistance(), setpoint) + feedforward.calculate(setpoint, 0)); //TODO: Figure out feedforward method
-    motor2.setVoltage(pid.calculate(encoder.getDistance(), setpoint) + feedforward.calculate(setpoint, 0)); //TODO: Figure out feedforward method
+   // motor1.setVoltage(pid.calculate(encoder.getDistance(), setpoint) + feedforward.calculate(setpoint, 0)); //TODO: Figure out feedforward method
+    //motor2.setVoltage(pid.calculate(encoder.getDistance(), setpoint) + feedforward.calculate(setpoint, 0)); //TODO: Figure out feedforward method
   }
 
   public double getPos() {
@@ -119,28 +114,38 @@ public class Arm extends SubsystemBase {
   }
 
   public void setL1() {
-    moveToPos(armPositions.LOW);
+   // moveToPos(armPositions.LOW);
     
   }
 
   public void setL2() {
-    moveToPos(armPositions.MID);
+   // moveToPos(armPositions.MID);
   }
 
   public void setL3() {
-    moveToPos(armPositions.HIGH);
+   // moveToPos(armPositions.HIGH);
   }
 
   public void setShelf() {
-    moveToPos(armPositions.SHELF);
+   // moveToPos(armPositions.SHELF);
   }
 
   public void stow() {
-    moveToPos(armPositions.STOW);
+    //moveToPos(armPositions.STOW);
   }
 
   public void resetPID() {
     pid.reset();  
+  }
+
+  public void moveUp() {
+    motor1.set(ControlMode.PercentOutput, 0.25);
+    motor2.set(ControlMode.PercentOutput, 0.25);
+  }
+
+  public void moveDown() {
+    motor1.set(ControlMode.PercentOutput, -0.25);
+    motor2.set(ControlMode.PercentOutput, -0.25);
   }
 
   @Override

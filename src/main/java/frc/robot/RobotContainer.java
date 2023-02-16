@@ -37,7 +37,8 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton runIntake = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton runIntake = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final JoystickButton otherIntake = new JoystickButton(driver, XboxController.Button.kB.value);
 
     //Testing buttons
     private final JoystickButton moveArmUp = new JoystickButton(testingController, XboxController.Button.kY.value);
@@ -77,6 +78,7 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         runIntake.whileTrue(new runIntake(s_Intake));
+        otherIntake.whileTrue(new otherIntakerun(s_Intake));
 
         //Buttons for testing
         moveArmUp.whileTrue(new moveArmUp(s_Arm));

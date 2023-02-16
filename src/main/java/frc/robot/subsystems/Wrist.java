@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
@@ -53,7 +54,8 @@ public class Wrist extends SubsystemBase {
     pid = new PIDController(Constants.Wrist.kP, Constants.Wrist.kI, Constants.Wrist.kD);
     feedforward = new ArmFeedforward(Constants.Wrist.kS, Constants.Wrist.kG, Constants.Wrist.kV);
 
-    motor = new WPI_TalonFX(50); // TODO: Update Motor ID
+    motor = new WPI_TalonFX(25); // TODO: Update Motor ID
+    motor.setNeutralMode(NeutralMode.Brake);
   }
 
   public void reset() {
@@ -61,11 +63,11 @@ public class Wrist extends SubsystemBase {
   }
 
   public void moveUp() {
-    motor.set(ControlMode.PercentOutput, 50.0);
+    motor.set(ControlMode.PercentOutput, 0.25);
   }
 
   public void moveDown() {
-    motor.set(ControlMode.PercentOutput, -50.0);
+    motor.set(ControlMode.PercentOutput, -0.25);
   }
 
   public void stop() {

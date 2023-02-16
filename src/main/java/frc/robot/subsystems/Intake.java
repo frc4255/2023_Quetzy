@@ -12,7 +12,7 @@ public class Intake extends SubsystemBase {
     private TalonFX motor;
 
     public Intake() {
-        motor = new TalonFX(60); //TODO: Update motor ID
+        motor = new TalonFX(30); //TODO: Update motor ID
     }
 
     public void intakeObject() {
