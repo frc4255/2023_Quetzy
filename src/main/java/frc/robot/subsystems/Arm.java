@@ -1,6 +1,10 @@
 package frc.robot.subsystems;
 
 import java.util.HashMap;
+
+import org.opencv.core.Mat;
+
+import java.io.ObjectOutputStream.PutField;
 import java.lang.Math;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -44,20 +48,23 @@ public class Arm extends SubsystemBase {
 
     // TODO: Deploy code to robot and find setpoint values by moving the arm and checking shuffleboard, then run SysID and pray.
 
-    armSetpoints.put(armPositions.STOW, 100.50); // TODO: Update STOW Setpoint
-    armSetpoints.put(armPositions.LOW, 200.0); // TODO: Update LOW Setpoint
-    armSetpoints.put(armPositions.MID, 300.0); // TODO: Update MID Setpoint
-    armSetpoints.put(armPositions.HIGH, 400.0); // TODO: Update HIGH Setpoint
-    armSetpoints.put(armPositions.SHELF, 250.0); // TODO: Update SHELF Setpoint
+    armSetpoints.put(armPositions.STOW, 1.6); // TODO: Update STOW Setpoint
+    armSetpoints.put(armPositions.LOW, 1.68); // TODO: Update LOW Setpoint
+    armSetpoints.put(armPositions.MID, 2.07); // TODO: Update MID Setpoint
+    armSetpoints.put(armPositions.HIGH, 3.4); // TODO: Update HIGH Setpoint
+    armSetpoints.put(armPositions.SHELF, 3.4); // TODO: Update SHELF Setpoint
 
-    encoder = new DutyCycleEncoder(0); // TODO: Ensure encoder object has correct DIO channel
-    encoder.setDistancePerRotation(0.25);
+    encoder = new DutyCycleEncoder(1); // TODO: Ensure encoder object has correct DIO channel
+    encoder.setDistancePerRotation(2*Math.PI);
+    encoder.setPositionOffset(0.5);
 
     pid = new PIDController(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD);
     feedforward = new ArmFeedforward(Constants.Arm.kS, Constants.Arm.kG, Constants.Arm.kV);
 
     motor1 = new WPI_TalonFX(20); // TODO: Update Motor ID
     motor2 = new WPI_TalonFX(21); // TODO: Update Motor ID
+    motor1.setInverted(true);
+    motor2.setInverted(true);
     motor1.setNeutralMode(NeutralMode.Brake);
     motor2.setNeutralMode(NeutralMode.Brake);
   }
@@ -72,7 +79,7 @@ public class Arm extends SubsystemBase {
   }
 
   private double getPosInRadians() {
-   return encoder.getAbsolutePosition() * 2 * Math.PI;
+   return (encoder.getDistance()) * 2 * Math.PI;
   }
   private void moveToPos(armPositions pos) {
     switch (pos) {
@@ -97,8 +104,10 @@ public class Arm extends SubsystemBase {
       return;
     }
 
-   // motor1.setVoltage(pid.calculate(encoder.getDistance(), setpoint) + feedforward.calculate(setpoint, 0)); //TODO: Figure out feedforward method
-    //motor2.setVoltage(pid.calculate(encoder.getDistance(), setpoint) + feedforward.calculate(setpoint, 0)); //TODO: Figure out feedforward method
+
+    motor1.setVoltage(pid.calculate(encoder.getDistance(), setpoint) + feedforward.calculate(setpoint, 0)*-1); //TODO: Figure out feedforward method
+    motor2.setVoltage(pid.calculate(encoder.getDistance(), setpoint) + feedforward.calculate(setpoint, 0)*-1); //TODO: Figure out feedforward method
+
   }
 
   public double getPos() {
@@ -114,24 +123,25 @@ public class Arm extends SubsystemBase {
   }
 
   public void setL1() {
-   // moveToPos(armPositions.LOW);
+    moveToPos(armPositions.LOW);
     
   }
 
   public void setL2() {
-   // moveToPos(armPositions.MID);
+    moveToPos(armPositions.MID);
+    System.out.println("HEllo");
   }
 
   public void setL3() {
-   // moveToPos(armPositions.HIGH);
+    moveToPos(armPositions.HIGH);
   }
 
   public void setShelf() {
-   // moveToPos(armPositions.SHELF);
+    moveToPos(armPositions.SHELF);
   }
 
   public void stow() {
-    //moveToPos(armPositions.STOW);
+    moveToPos(armPositions.STOW);
   }
 
   public void resetPID() {
@@ -151,7 +161,9 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Arm Encoder value", encoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Arm Encoder value", encoder.getDistance());
+    SmartDashboard.putNumber("Arm Pos in Radians", getPosInRadians());
+    SmartDashboard.putNumber("feedfoward input", getPosInRadians() - (Math.PI/2));
   }
 
   @Override

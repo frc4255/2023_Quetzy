@@ -42,20 +42,22 @@ public class Wrist extends SubsystemBase {
 
     // TODO: Deploy code to robot and find setpoint values by moving the wrist and checking shuffleboard, then run SysID and pray.
 
-    wristSetpoints.put(wristPositions.STOW, 100.50); // TODO: Update STOW Setpoint
-    wristSetpoints.put(wristPositions.LOW, 200.0); // TODO: Update LOW Setpoint
-    wristSetpoints.put(wristPositions.MID, 300.0); // TODO: Update MID Setpoint
-    wristSetpoints.put(wristPositions.HIGH, 400.0); // TODO: Update HIGH Setpoint
-    wristSetpoints.put(wristPositions.SHELF, 250.0); // TODO: Update SHELF Setpoint
+    wristSetpoints.put(wristPositions.STOW, 4.25); // TODO: Update STOW Setpoint
+    wristSetpoints.put(wristPositions.LOW, 3.12); // TODO: Update LOW Setpoint
+    wristSetpoints.put(wristPositions.MID, 3.95); // TODO: Update MID Setpoint
+    wristSetpoints.put(wristPositions.HIGH, 3.45); // TODO: Update HIGH Setpoint
+    wristSetpoints.put(wristPositions.SHELF, 3.2); // TODO: Update SHELF Setpoint
 
-    encoder = new DutyCycleEncoder(1); // TODO: Ensure encoder object has correct DIO channel
-    encoder.setDistancePerRotation(0.25);
+    encoder = new DutyCycleEncoder(0); // TODO: Ensure encoder object has correct DIO channel
+    encoder.setDistancePerRotation(2*Math.PI);
+    encoder.setPositionOffset(0.1);
 
     pid = new PIDController(Constants.Wrist.kP, Constants.Wrist.kI, Constants.Wrist.kD);
     feedforward = new ArmFeedforward(Constants.Wrist.kS, Constants.Wrist.kG, Constants.Wrist.kV);
 
     motor = new WPI_TalonFX(25); // TODO: Update Motor ID
     motor.setNeutralMode(NeutralMode.Brake);
+    motor.setInverted(true);
   }
 
   public void reset() {
@@ -63,11 +65,11 @@ public class Wrist extends SubsystemBase {
   }
 
   public void moveUp() {
-    motor.set(ControlMode.PercentOutput, 0.25);
+    motor.set(ControlMode.PercentOutput, 0.15);
   }
 
   public void moveDown() {
-    motor.set(ControlMode.PercentOutput, -0.25);
+    motor.set(ControlMode.PercentOutput, -0.15);
   }
 
   public void stop() {
@@ -97,7 +99,9 @@ public class Wrist extends SubsystemBase {
       return;
     }
 
-    motor.setVoltage(pid.calculate(encoder.getDistance(), setpoint) + feedforward.calculate(setpoint, 0)); //TODO: Figure out feedforward method
+    //System.out.println(pid.calculate(encoder.getDistance() *-1 + 2*Math.PI, Math.PI) + feedforward.calculate(setpoint, 0));
+
+    motor.setVoltage(pid.calculate(encoder.getDistance() *-1 + 2*Math.PI, setpoint) + feedforward.calculate(setpoint, 0)*-1); //TODO: Figure out feedforward method
   }
 
   public double getPos() {
@@ -137,6 +141,7 @@ public class Wrist extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Wrist Encoder value", encoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Wrist position", encoder.getDistance() *-1 + 2*Math.PI);
   }
 
   @Override
