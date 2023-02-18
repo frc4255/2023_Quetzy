@@ -20,13 +20,13 @@ public class moveArmUp extends CommandBase{
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Arm.moveUp();
+   // m_Arm.moveUp();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_Arm.stop();
+    //m_Arm.stop();
   }
 
   // Returns true when the command should end.

@@ -24,7 +24,9 @@ public final class Constants {
         public static final double kG = 0.3;
         public static final double kV = 0.00;
 
-        public static final int gearRatio = 162/1; 
+        //Trapezodial Profile Constants
+        public static final double kMaxVelocityRads = 0.5;
+        public static final double kMaxAccelerationRads = 0.5;
     }
 
     public static final class Wrist {
