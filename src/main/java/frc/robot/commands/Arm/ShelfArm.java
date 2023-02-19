@@ -18,7 +18,10 @@ public class ShelfArm extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_Arm.enable();
+    m_Wrist.enable();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -29,7 +32,10 @@ public class ShelfArm extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_Arm.disable();
+    m_Wrist.disable();
+  }
 
   // Returns true when the command should end.
   @Override

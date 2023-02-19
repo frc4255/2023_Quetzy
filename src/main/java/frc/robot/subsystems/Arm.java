@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import java.util.HashMap;
 
-import org.opencv.core.Mat;
-
 import java.io.ObjectOutputStream.PutField;
 import java.lang.Math;
 
@@ -32,14 +30,9 @@ public class Arm extends ProfiledPIDSubsystem {
   private WPI_TalonFX motor1;
   private WPI_TalonFX motor2;
 
-  //private double goal;
-  private TrapezoidProfile.State setpoint;
-
   private PIDController pid;
   private ArmFeedforward m_feedforward;
 
-  private final Double topLimit = 1000.0;
-  private final Double bottomLimit = -1000.0;
   private enum armPositions {
     STOW,
     LOW,
@@ -72,7 +65,6 @@ public class Arm extends ProfiledPIDSubsystem {
     encoder.setDistancePerRotation(2*Math.PI);
     encoder.setPositionOffset(0.5);
 
-    //pid = new PIDController(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD);
     m_feedforward = new ArmFeedforward(Constants.Arm.kS, Constants.Arm.kG, Constants.Arm.kV);
 
     motor1 = new WPI_TalonFX(20); // TODO: Update Motor ID
@@ -81,29 +73,26 @@ public class Arm extends ProfiledPIDSubsystem {
     motor2.setInverted(true);
     motor1.setNeutralMode(NeutralMode.Brake);
     motor2.setNeutralMode(NeutralMode.Brake);
-    super.enable();
-    setpoint = new TrapezoidProfile.State(1.7, 0);
   }
 
   private void moveToPos(armPositions pos) {
     switch (pos) {
       case LOW:
-        setpoint = setPos(armgoals.get(armPositions.LOW));
+        setGoal(1.68);
         break;
       case MID:
-        setpoint = setPos(armgoals.get(armPositions.MID));
+        setGoal(2.07);
         break;
       case HIGH:
-        setpoint = setPos(armgoals.get(armPositions.HIGH));
+        setGoal(3.4);
         break;
       case SHELF:
-        setpoint = setPos(armgoals.get(armPositions.SHELF));
+        setGoal(3.4);
         break;
       case STOW:
-        setpoint = setPos(armgoals.get(armPositions.STOW));
+        setGoal(1.6);
         break;
     }
-    m_controller.setGoal(setpoint);
   }
 
   public void setL1() {
@@ -112,7 +101,6 @@ public class Arm extends ProfiledPIDSubsystem {
 
   public void setL2() {
     moveToPos(armPositions.MID);
-    System.out.println("HEllo");
   }
 
   public void setL3() {
@@ -141,19 +129,11 @@ public class Arm extends ProfiledPIDSubsystem {
     motor2.set(ControlMode.PercentOutput, -0.25);
   }
 
-  private TrapezoidProfile.State setPos(double goal) {
-    return new TrapezoidProfile.State(goal, 0);
-  }
-  
-
   @Override
-  protected void useOutput(double output, TrapezoidProfile.State setpoint) {
+  public void useOutput(double output, TrapezoidProfile.State setpoint) {
     double feedforward = m_feedforward.calculate(setpoint.position, setpoint.velocity);
     motor1.setVoltage(output + feedforward);
     motor2.setVoltage(output + feedforward);
-    System.out.println(feedforward);
-    SmartDashboard.putNumber("Setpoint position", setpoint.position);
-    SmartDashboard.putNumber("Setpoint velocity", setpoint.velocity);
   }
 
   @Override
@@ -164,7 +144,7 @@ public class Arm extends ProfiledPIDSubsystem {
   }
 
   @Override
-  protected double getMeasurement() {
+  public double getMeasurement() {
     return encoder.getDistance();
   }
 }

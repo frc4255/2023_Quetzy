@@ -19,8 +19,8 @@ public class MidArm extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //m_Wrist.setL2();
-    //m_Arm.setL2();
+    m_Arm.enable();
+    m_Wrist.enable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,8 +33,8 @@ public class MidArm extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Command decided to end");
-    System.out.println("Error: " + interrupted);
+    m_Arm.disable();
+    m_Wrist.disable();
   }
 
   // Returns true when the command should end.
