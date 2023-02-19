@@ -15,18 +15,18 @@ public final class Constants {
 
     public static final class Arm {
         //PID Constants
-        public static final double kP = 3.5;
-        public static final double kI = 0.5;
+        public static final double kP = 0.0;
+        public static final double kI = 0.00;
         public static final double kD = 0.00;
 
         //Feedfoward Constants
         public static final double kS = 0.00;
-        public static final double kG = 0.3;
-        public static final double kV = 0.00;
+        public static final double kG = -0.3;
+        public static final double kV = 3;
 
         //Trapezodial Profile Constants
-        public static final double kMaxVelocityRads = 0.5;
-        public static final double kMaxAccelerationRads = 0.5;
+        public static final double kMaxVelocityRads = 0.75;
+        public static final double kMaxAccelerationRads = 1;
     }
 
     public static final class Wrist {
@@ -43,7 +43,7 @@ public final class Constants {
     }
 
     public static final class Swerve {
-        public static final boolean invertGyro = true; // Always ensure Gyro is CCW+ CW-
+        public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 
         public static final COTSFalconSwerveConstants chosenModule = 
             COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L2);

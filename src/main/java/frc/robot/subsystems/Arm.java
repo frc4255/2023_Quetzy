@@ -72,7 +72,7 @@ public class Arm extends ProfiledPIDSubsystem {
     encoder.setDistancePerRotation(2*Math.PI);
     encoder.setPositionOffset(0.5);
 
-    pid = new PIDController(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD);
+    //pid = new PIDController(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD);
     m_feedforward = new ArmFeedforward(Constants.Arm.kS, Constants.Arm.kG, Constants.Arm.kV);
 
     motor1 = new WPI_TalonFX(20); // TODO: Update Motor ID
@@ -81,6 +81,8 @@ public class Arm extends ProfiledPIDSubsystem {
     motor2.setInverted(true);
     motor1.setNeutralMode(NeutralMode.Brake);
     motor2.setNeutralMode(NeutralMode.Brake);
+    super.enable();
+    setpoint = new TrapezoidProfile.State(1.7, 0);
   }
 
   private void moveToPos(armPositions pos) {
@@ -101,13 +103,11 @@ public class Arm extends ProfiledPIDSubsystem {
         setpoint = setPos(armgoals.get(armPositions.STOW));
         break;
     }
-
-    setGoal(setpoint);
+    m_controller.setGoal(setpoint);
   }
 
   public void setL1() {
     moveToPos(armPositions.LOW);
-    
   }
 
   public void setL2() {
@@ -151,21 +151,20 @@ public class Arm extends ProfiledPIDSubsystem {
     double feedforward = m_feedforward.calculate(setpoint.position, setpoint.velocity);
     motor1.setVoltage(output + feedforward);
     motor2.setVoltage(output + feedforward);
+    System.out.println(feedforward);
+    SmartDashboard.putNumber("Setpoint position", setpoint.position);
+    SmartDashboard.putNumber("Setpoint velocity", setpoint.velocity);
+  }
+
+  @Override
+  public void periodic() {
+    super.periodic();
+
+    SmartDashboard.putNumber("Arm encoder value", encoder.getDistance());
   }
 
   @Override
   protected double getMeasurement() {
     return encoder.getDistance();
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Arm Encoder value", encoder.getDistance());
-  }
-
-  @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
   }
 }
