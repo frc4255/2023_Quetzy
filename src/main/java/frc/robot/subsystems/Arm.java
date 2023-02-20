@@ -2,26 +2,19 @@ package frc.robot.subsystems;
 
 import java.util.HashMap;
 
-import java.io.ObjectOutputStream.PutField;
 import java.lang.Math;
 
-import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 
 import frc.robot.Constants;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.controller.ArmFeedforward;
 
 public class Arm extends ProfiledPIDSubsystem {
@@ -30,7 +23,6 @@ public class Arm extends ProfiledPIDSubsystem {
   private WPI_TalonFX motor1;
   private WPI_TalonFX motor2;
 
-  private PIDController pid;
   private ArmFeedforward m_feedforward;
 
   private enum armPositions {
@@ -43,32 +35,28 @@ public class Arm extends ProfiledPIDSubsystem {
 
   private final HashMap<armPositions, Double> armgoals = new HashMap<>();
 
-  /** Creates a new Arm Subsystem. */
   public Arm() {
-
-    // TODO: Deploy code to robot and find goal values by moving the arm and checking shuffleboard, then run SysID and pray.
-
     super(new ProfiledPIDController(
-      Constants.Arm.kP,
-      Constants.Arm.kI,
-      Constants.Arm.kD,
-      new TrapezoidProfile.Constraints(Constants.Arm.kMaxVelocityRads, Constants.Arm.kMaxAccelerationRads))
+        Constants.Arm.kP,
+        Constants.Arm.kI,
+        Constants.Arm.kD,
+        new TrapezoidProfile.Constraints(Constants.Arm.kMaxVelocityRads, Constants.Arm.kMaxAccelerationRads))
     );
 
-    armgoals.put(armPositions.STOW, 1.6); // TODO: Update STOW goal
-    armgoals.put(armPositions.LOW, 1.68); // TODO: Update LOW goal
-    armgoals.put(armPositions.MID, 2.07); // TODO: Update MID goal
-    armgoals.put(armPositions.HIGH, 3.4); // TODO: Update HIGH goal
-    armgoals.put(armPositions.SHELF, 3.4); // TODO: Update SHELF goal
+    armgoals.put(armPositions.STOW, 1.6);
+    armgoals.put(armPositions.LOW, 1.68);
+    armgoals.put(armPositions.MID, 2.07);
+    armgoals.put(armPositions.HIGH, 3.4);
+    armgoals.put(armPositions.SHELF, 3.4);
 
-    encoder = new DutyCycleEncoder(1); // TODO: Ensure encoder object has correct DIO channel
-    encoder.setDistancePerRotation(2*Math.PI);
+    encoder = new DutyCycleEncoder(1);
+    encoder.setDistancePerRotation(2 * Math.PI);
     encoder.setPositionOffset(0.5);
 
     m_feedforward = new ArmFeedforward(Constants.Arm.kS, Constants.Arm.kG, Constants.Arm.kV);
 
-    motor1 = new WPI_TalonFX(20); // TODO: Update Motor ID
-    motor2 = new WPI_TalonFX(21); // TODO: Update Motor ID
+    motor1 = new WPI_TalonFX(20);
+    motor2 = new WPI_TalonFX(21);
     motor1.setInverted(true);
     motor2.setInverted(true);
     motor1.setNeutralMode(NeutralMode.Brake);
@@ -115,20 +103,6 @@ public class Arm extends ProfiledPIDSubsystem {
     moveToPos(armPositions.STOW);
   }
 
-  public void resetPID() {
-    pid.reset();  
-  }
-
-  public void moveUp() {
-    motor1.set(ControlMode.PercentOutput, 0.25);
-    motor2.set(ControlMode.PercentOutput, 0.25);
-  }
-
-  public void moveDown() {
-    motor1.set(ControlMode.PercentOutput, -0.25);
-    motor2.set(ControlMode.PercentOutput, -0.25);
-  }
-
   @Override
   public void useOutput(double output, TrapezoidProfile.State setpoint) {
     double feedforward = m_feedforward.calculate(setpoint.position, setpoint.velocity);
@@ -139,8 +113,6 @@ public class Arm extends ProfiledPIDSubsystem {
   @Override
   public void periodic() {
     super.periodic();
-
-    SmartDashboard.putNumber("Arm encoder value", encoder.getDistance());
   }
 
   @Override

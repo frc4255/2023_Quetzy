@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.autos.*;
 import frc.robot.commands.*;
-import frc.robot.commands.Test.*;
-import frc.robot.commands.Wrist.MidWrist;
 import frc.robot.commands.Arm.HighArm;
 import frc.robot.commands.Arm.LowArm;
 import frc.robot.commands.Arm.MidArm;
@@ -40,20 +38,12 @@ public class RobotContainer {
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kBack.value);
     private final JoystickButton runIntake = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
     private final JoystickButton otherIntake = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
-
     private final JoystickButton setStow = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton setL2 = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton setL3 = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton setL1 = new JoystickButton(driver, XboxController.Button.kB.value);
+
     private final JoystickButton setShelf = new JoystickButton(testingController, XboxController.Button.kY.value);
-
-    /*//Testing buttons
-    private final JoystickButton moveArmUp = new JoystickButton(testingController, XboxController.Button.kY.value);
-    private final JoystickButton moveArmDown = new JoystickButton(testingController, XboxController.Button.kA.value);
-    private final JoystickButton moveWristUp = new JoystickButton(testingController, XboxController.Button.kRightBumper.value);
-    private final JoystickButton moveWristDown = new JoystickButton(testingController, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton moveL2 = new JoystickButton(testingController, XboxController.Button.kB.value);*/
-
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -88,13 +78,10 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         runIntake.whileTrue(new runIntake(s_Intake));
         otherIntake.whileTrue(new otherIntakerun(s_Intake));
-
-        //Buttons for testing
         setStow.onTrue(new StowArm(s_Arm, s_Wrist));
         setL2.onTrue(new MidArm(s_Arm, s_Wrist));
         setL3.onTrue(new HighArm(s_Arm, s_Wrist));
         setL1.onTrue(new LowArm(s_Arm, s_Wrist));
-        //moveL2.onTrue(new MidArm(s_Arm, s_Wrist));
         setShelf.onTrue(new ShelfArm(s_Arm, s_Wrist));
 
     }

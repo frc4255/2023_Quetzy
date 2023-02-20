@@ -6,15 +6,12 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-
-
-
 public class Intake extends SubsystemBase {
     private TalonFX motor;
     
 
     public Intake() {
-        motor = new TalonFX(30); //TODO: Update motor ID
+        motor = new TalonFX(30);
         motor.setNeutralMode(NeutralMode.Brake);
     }
 
