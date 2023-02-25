@@ -5,17 +5,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Wrist;
 import com.pathplanner.lib.PathPlannerTrajectory;
-public class AutoHighArm extends CommandBase{
+public class ArmL3 extends CommandBase{
     
     private final Arm m_Arm;
-    private final Wrist m_Wrist;
-    private boolean hasWaited = false;
 
-    public AutoHighArm(Arm m_Arm, Wrist m_Wrist) {
+    public ArmL3(Arm m_Arm) {
         this.m_Arm = m_Arm;
-        this.m_Wrist = m_Wrist;
 
-        addRequirements(m_Arm, m_Wrist);
+        addRequirements(m_Arm);
     }
 
 // Called when the command is initially scheduled.
@@ -28,26 +25,22 @@ public class AutoHighArm extends CommandBase{
   @Override
   public void execute() {
     m_Arm.setL3();
-
-    if (!hasWaited) {
-      Timer.delay(0.5);
-      hasWaited = true;
-      m_Wrist.enable();
-    }
-    
-    m_Wrist.setL3();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_Wrist.disable();
     m_Arm.disable();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+
+    if (m_Arm.isNearGoal("high")) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

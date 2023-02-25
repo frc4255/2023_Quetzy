@@ -79,6 +79,35 @@ public class Wrist extends ProfiledPIDSubsystem {
     }
   }
 
+  public boolean isNearGoal(String goal) {
+
+    double goalPos = 4.38;
+
+    switch (goal.toLowerCase()) {
+      case "low":
+        goalPos = wristGoals.get(wristPositions.LOW);
+        break;
+      case "mid":
+        goalPos = wristGoals.get(wristPositions.MID);
+        break;
+      case "high":
+        goalPos = wristGoals.get(wristPositions.HIGH);
+        break;
+      case "shelf":
+        goalPos = wristGoals.get(wristPositions.SHELF);
+        break;
+      case "stow":
+        goalPos = wristGoals.get(wristPositions.STOW);
+        break;
+    } 
+
+    if (Math.abs(getMeasurement() - goalPos) < 0.04 || getMeasurement() == goalPos) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   public void setL1() {
     moveToPos(wristPositions.LOW);
   }

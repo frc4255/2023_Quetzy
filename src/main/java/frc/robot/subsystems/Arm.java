@@ -35,8 +35,6 @@ public class Arm extends ProfiledPIDSubsystem {
 
   private final HashMap<armPositions, Double> armgoals = new HashMap<>();
 
-  private double goal;
-
   public Arm() {
     super(new ProfiledPIDController(
         Constants.Arm.kP,
@@ -85,13 +83,36 @@ public class Arm extends ProfiledPIDSubsystem {
     }
   }
 
-  public boolean atGoal() {
-    return encoder.getDistance()== goal;
-  }
+  public boolean isNearGoal(String goal) {
 
+    double goalPos = 1.6;
+
+    switch (goal.toLowerCase()) {
+      case "low":
+        goalPos = armgoals.get(armPositions.LOW);
+        break;
+      case "mid":
+        goalPos = armgoals.get(armPositions.MID);
+        break;
+      case "high":
+        goalPos = armgoals.get(armPositions.HIGH);
+        break;
+      case "shelf":
+        goalPos = armgoals.get(armPositions.SHELF);
+        break;
+      case "stow":
+        goalPos = armgoals.get(armPositions.STOW);
+        break;
+    }
+
+    if (Math.abs(encoder.getDistance() - goalPos) < 0.04 || encoder.getDistance() == goalPos) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   public void setL1() {
     moveToPos(armPositions.LOW);
-    goal = armgoals.get(armPositions.LOW);
   }
 
   public void setL2() {
