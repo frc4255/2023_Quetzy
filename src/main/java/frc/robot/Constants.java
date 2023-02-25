@@ -15,28 +15,34 @@ public final class Constants {
 
     public static final class Arm {
         //PID Constants
-        public static final double kP = 0.03;
-        public static final double kI = 0.00;
+        public static final double kP = 16.0;
+        public static final double kI = 0.00; //NO TOUCHIES
         public static final double kD = 0.00;
 
         //Feedfoward Constants
         public static final double kS = 0.00;
-        public static final double kG = 0.00;
-        public static final double kV = 0.00;
+        public static final double kG = -0.35;
+        public static final double kV = 3;
 
-        public static final int gearRatio = 162/1; 
+        //Trapezodial Profile Constants
+        public static final double kMaxVelocityRads = 2;
+        public static final double kMaxAccelerationRads = 2;
     }
 
     public static final class Wrist {
         //PID Constants
-         public static final double kP = 0.03;
+         public static final double kP = 17.0;
          public static final double kI = 0.00;
          public static final double kD = 0.00;
  
          //Feedfoward Constants
          public static final double kS = 0.00;
-         public static final double kG = 0.00;
-         public static final double kV = 0.00;
+         public static final double kG = -0.4;
+         public static final double kV = 1.43;
+
+         //Trapezodial Profile Constants
+        public static final double kMaxVelocityRads = 2;
+        public static final double kMaxAccelerationRads = 2;
  
     }
 
@@ -99,15 +105,15 @@ public final class Constants {
 
         /* Drive Motor Characterization Values 
          * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
-        public static final double driveKS = (0.32 / 12); //TODO: This must be tuned to specific robot
-        public static final double driveKV = (1.51 / 12);
-        public static final double driveKA = (0.27 / 12);
+        public static final double driveKS = (0.11 / 12); //TODO: This must be tuned to specific robot
+        public static final double driveKV = (2.26 / 12);
+        public static final double driveKA = (0.39 / 12);
 
         /* Swerve Profiling Values */
         /** Meters per Second */
         public static final double maxSpeed = 1; //TODO: This must be tuned to specific robot (only works for closed loop/auto)
         /** Radians per Second */
-        public static final double maxAngularVelocity = 4.0; //TODO: This must be tuned to specific robot
+        public static final double maxAngularVelocity = 2.3; //TODO: This must be tuned to specific robot
 
         /* Neutral Modes */
         public static final NeutralMode angleNeutralMode = NeutralMode.Coast;

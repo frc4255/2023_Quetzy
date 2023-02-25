@@ -2,30 +2,27 @@ package frc.robot.subsystems;
 
 import java.util.HashMap;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
+
 import frc.robot.Constants;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.controller.ArmFeedforward;
 
-public class Wrist extends SubsystemBase {
+public class Wrist extends ProfiledPIDSubsystem {
 
   private DutyCycleEncoder encoder;
   private WPI_TalonFX motor;
 
-  private double setpoint;
+  private ArmFeedforward m_feedforward;
 
-  private PIDController pid;
-  private ArmFeedforward feedforward;
-
-  private final Double topLimit = 1000.0;
-  private final Double bottomLimit = -1000.0;
   private enum wristPositions {
     STOW,
     LOW,
@@ -34,77 +31,56 @@ public class Wrist extends SubsystemBase {
     SHELF
   }
 
-  private final HashMap<wristPositions, Double> wristSetpoints = new HashMap<>();
+  private final HashMap<wristPositions, Double> wristGoals = new HashMap<>();
 
-  /** Creates a new Arm Subsystem. */
   public Wrist() {
 
-    // TODO: Deploy code to robot and find setpoint values by moving the wrist and checking shuffleboard, then run SysID and pray.
+    super(new ProfiledPIDController(
+        Constants.Wrist.kP,
+        Constants.Wrist.kI,
+        Constants.Wrist.kD,
+        new TrapezoidProfile.Constraints(Constants.Wrist.kMaxVelocityRads, Constants.Wrist.kMaxAccelerationRads))
+    );
 
-    wristSetpoints.put(wristPositions.STOW, 100.50); // TODO: Update STOW Setpoint
-    wristSetpoints.put(wristPositions.LOW, 200.0); // TODO: Update LOW Setpoint
-    wristSetpoints.put(wristPositions.MID, 300.0); // TODO: Update MID Setpoint
-    wristSetpoints.put(wristPositions.HIGH, 400.0); // TODO: Update HIGH Setpoint
-    wristSetpoints.put(wristPositions.SHELF, 250.0); // TODO: Update SHELF Setpoint
+   wristGoals.put(wristPositions.STOW, 4.38);
+   wristGoals.put(wristPositions.LOW, 3.12);
+   wristGoals.put(wristPositions.MID, 3.95);
+   wristGoals.put(wristPositions.HIGH, 3.45);
+   wristGoals.put(wristPositions.SHELF, 3.2);
 
-    encoder = new DutyCycleEncoder(1); // TODO: Ensure encoder object has correct DIO channel
-    encoder.setDistancePerRotation(0.25);
+    encoder = new DutyCycleEncoder(0);
+    encoder.setDistancePerRotation(2 * Math.PI);
+    encoder.setPositionOffset(0.1);
 
-    pid = new PIDController(Constants.Wrist.kP, Constants.Wrist.kI, Constants.Wrist.kD);
-    feedforward = new ArmFeedforward(Constants.Wrist.kS, Constants.Wrist.kG, Constants.Wrist.kV);
+    m_feedforward = new ArmFeedforward(Constants.Wrist.kS, Constants.Wrist.kG, Constants.Wrist.kV);
 
-    motor = new WPI_TalonFX(50); // TODO: Update Motor ID
-  }
-
-  public void reset() {
-    encoder.reset();
-  }
-
-  public void stop() {
-    motor.set(ControlMode.PercentOutput, 0.0);
+    motor = new WPI_TalonFX(25);
+    motor.setNeutralMode(NeutralMode.Brake);
+    motor.setInverted(true);
   }
 
   private void moveToPos(wristPositions pos) {
     switch (pos) {
       case LOW:
-        setpoint = wristSetpoints.get(wristPositions.LOW);
+        setGoal(wristGoals.get(wristPositions.LOW));
         break;
       case MID:
-        setpoint = wristSetpoints.get(wristPositions.MID);
+        setGoal(wristGoals.get(wristPositions.MID));
         break;
       case HIGH:
-        setpoint = wristSetpoints.get(wristPositions.HIGH);
+        setGoal(wristGoals.get(wristPositions.HIGH));
         break;
       case SHELF:
-        setpoint = wristSetpoints.get(wristPositions.SHELF);
+        setGoal(wristGoals.get(wristPositions.SHELF));
         break;
       case STOW:
-        setpoint = wristSetpoints.get(wristPositions.STOW);
+        setGoal(wristGoals.get(wristPositions.STOW));
         break;
-    }
-
-    if (isAtLimit()) {
-      return;
-    }
-
-    motor.setVoltage(pid.calculate(encoder.getDistance(), setpoint) + feedforward.calculate(setpoint, 0)); //TODO: Figure out feedforward method
-  }
-
-  public double getPos() {
-    return encoder.getAbsolutePosition();
-  }
-
-  private Boolean isAtLimit() {
-    if (getPos() >= topLimit || getPos() <= bottomLimit) {
-      return true;
-    } else {
-      return false;
     }
   }
 
   public void setL1() {
     moveToPos(wristPositions.LOW);
-    
   }
 
   public void setL2() {
@@ -125,12 +101,21 @@ public class Wrist extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Wrist Encoder value", encoder.getAbsolutePosition());
+    super.periodic();
+  }
+
+  @Override
+  protected void useOutput(double output, State tempsetpoint) {
+    double feedforward = m_feedforward.calculate(tempsetpoint.position, tempsetpoint.velocity);
+    motor.setVoltage(output + feedforward);
+  }
+
+  @Override
+  protected double getMeasurement() {
+    return encoder.getDistance() * -1 + 2 * Math.PI;
   }
 
   @Override
   public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
   }
 }

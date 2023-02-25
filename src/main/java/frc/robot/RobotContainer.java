@@ -28,7 +28,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
-    private final Joystick mechOperator = new Joystick(1);
+    private final Joystick testingController = new Joystick(1);
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -36,16 +36,16 @@ public class RobotContainer {
     private final int rotationAxis = XboxController.Axis.kRightX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
-    private final JoystickButton runIntake = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kStart.value);
+    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kBack.value);
+    private final JoystickButton runIntake = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton otherIntake = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
+    private final JoystickButton setStow = new JoystickButton(driver, XboxController.Button.kA.value);
+    private final JoystickButton setL2 = new JoystickButton(driver, XboxController.Button.kX.value);
+    private final JoystickButton setL3 = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton setL1 = new JoystickButton(driver, XboxController.Button.kB.value);
 
-    //Mechanism Operator Buttons
-    private final JoystickButton setL1 = new JoystickButton(mechOperator, XboxController.Button.kA.value);
-    private final JoystickButton setL2 = new JoystickButton(mechOperator, XboxController.Button.kY.value);
-    private final JoystickButton setL3 = new JoystickButton(mechOperator, XboxController.Button.kX.value);
-    private final JoystickButton setShelf = new JoystickButton(mechOperator, XboxController.Button.kB.value);
-    private final JoystickButton setStow = new JoystickButton(mechOperator, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton setShelf = new JoystickButton(testingController, XboxController.Button.kY.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -53,7 +53,6 @@ public class RobotContainer {
     private final Wrist s_Wrist = new Wrist();
     private final Intake s_Intake = new Intake();
 
-    private SendableChooser<Command> autoChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -69,7 +68,6 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
-        configAutoChooser();
     }
 
     /**
@@ -82,22 +80,16 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         runIntake.whileTrue(new runIntake(s_Intake));
-
-        //Mech operator bindings
-        setL1.onTrue(new LowArm(s_Arm, s_Wrist));
+        otherIntake.whileTrue(new otherIntakerun(s_Intake));
+        setStow.onTrue(new StowArm(s_Arm, s_Wrist));
         setL2.onTrue(new MidArm(s_Arm, s_Wrist));
         setL3.onTrue(new HighArm(s_Arm, s_Wrist));
+        setL1.onTrue(new LowArm(s_Arm, s_Wrist));
         setShelf.onTrue(new ShelfArm(s_Arm, s_Wrist));
-        setStow.onTrue(new StowArm(s_Arm, s_Wrist));
-        
+
     }
 
     private void configAutoChooser() {
-        autoChooser = new SendableChooser<>();
-        autoChooser.setDefaultOption("Do Nothing", null); //TODO: Create Do Nothing auto object
-        autoChooser.setDefaultOption("Test path", new testPath(s_Swerve, s_Intake));
-        autoChooser.addOption("L3 Link", null); //TODO: Create L3 Link Class/Object
-        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     /**

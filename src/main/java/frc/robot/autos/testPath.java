@@ -18,8 +18,8 @@ public class testPath extends SequentialCommandGroup {
 
         this.s_intake = s_intake;
         this.s_swerve = s_swerve;
-        PathPlannerTrajectory path1 = PathPlanner.loadPath("Test1", 1, 1);
-        PathPlannerTrajectory path2 = PathPlanner.loadPath("Test2", 1, 1);
+        PathPlannerTrajectory path1 = PathPlanner.loadPath("TestPath1", 2, 1);
+        PathPlannerTrajectory path2 = PathPlanner.loadPath("TestPath2", 2, 1);
 
         PPSwerveControllerCommand follow1 = s_Swerve.followTrajectoryCommand(path1);
         PPSwerveControllerCommand follow2 = s_Swerve.followTrajectoryCommand(path2);

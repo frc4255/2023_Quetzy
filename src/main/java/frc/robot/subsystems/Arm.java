@@ -2,31 +2,29 @@ package frc.robot.subsystems;
 
 import java.util.HashMap;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.lang.Math;
+
+import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
+
 import frc.robot.Constants;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.controller.ArmFeedforward;
 
-public class Arm extends SubsystemBase {
+public class Arm extends ProfiledPIDSubsystem {
 
   private DutyCycleEncoder encoder;
   private WPI_TalonFX motor1;
   private WPI_TalonFX motor2;
 
-  private double setpoint;
+  private ArmFeedforward m_feedforward;
 
-  private PIDController pid;
-  private ArmFeedforward feedforward;
-
-  private final Double topLimit = 1000.0;
-  private final Double bottomLimit = -1000.0;
   private enum armPositions {
     STOW,
     LOW,
@@ -35,80 +33,58 @@ public class Arm extends SubsystemBase {
     SHELF
   }
 
-  private final HashMap<armPositions, Double> armSetpoints = new HashMap<>();
+  private final HashMap<armPositions, Double> armgoals = new HashMap<>();
 
-  /** Creates a new Arm Subsystem. */
   public Arm() {
+    super(new ProfiledPIDController(
+        Constants.Arm.kP,
+        Constants.Arm.kI,
+        Constants.Arm.kD,
+        new TrapezoidProfile.Constraints(Constants.Arm.kMaxVelocityRads, Constants.Arm.kMaxAccelerationRads))
+    );
 
-    // TODO: Deploy code to robot and find setpoint values by moving the arm and checking shuffleboard, then run SysID and pray.
+    armgoals.put(armPositions.STOW, 1.6);
+    armgoals.put(armPositions.LOW, 1.68);
+    armgoals.put(armPositions.MID, 2.07);
+    armgoals.put(armPositions.HIGH, 3.4);
+    armgoals.put(armPositions.SHELF, 3.4);
 
-    armSetpoints.put(armPositions.STOW, 100.50); // TODO: Update STOW Setpoint
-    armSetpoints.put(armPositions.LOW, 200.0); // TODO: Update LOW Setpoint
-    armSetpoints.put(armPositions.MID, 300.0); // TODO: Update MID Setpoint
-    armSetpoints.put(armPositions.HIGH, 400.0); // TODO: Update HIGH Setpoint
-    armSetpoints.put(armPositions.SHELF, 250.0); // TODO: Update SHELF Setpoint
+    encoder = new DutyCycleEncoder(1);
+    encoder.setDistancePerRotation(2 * Math.PI);
+    encoder.setPositionOffset(0.5);
 
-    encoder = new DutyCycleEncoder(0); // TODO: Ensure encoder object has correct DIO channel
-    encoder.setDistancePerRotation(0.25);
+    m_feedforward = new ArmFeedforward(Constants.Arm.kS, Constants.Arm.kG, Constants.Arm.kV);
 
-    pid = new PIDController(Constants.Arm.kP, Constants.Arm.kI, Constants.Arm.kD);
-    feedforward = new ArmFeedforward(Constants.Arm.kS, Constants.Arm.kG, Constants.Arm.kV);
-
-    motor1 = new WPI_TalonFX(40); // TODO: Update Motor ID
-    motor2 = new WPI_TalonFX(41); // TODO: Update Motor ID
-  }
-
-  public void reset() {
-    encoder.reset();
-  }
-
-  public void stop() {
-    motor1.set(ControlMode.PercentOutput, 0.0);
-    motor2.set(ControlMode.PercentOutput, 0.0);
+    motor1 = new WPI_TalonFX(20);
+    motor2 = new WPI_TalonFX(21);
+    motor1.setInverted(true);
+    motor2.setInverted(true);
+    motor1.setNeutralMode(NeutralMode.Brake);
+    motor2.setNeutralMode(NeutralMode.Brake);
   }
 
   private void moveToPos(armPositions pos) {
     switch (pos) {
       case LOW:
-        setpoint = armSetpoints.get(armPositions.LOW);
+        setGoal(1.68);
         break;
       case MID:
-        setpoint = armSetpoints.get(armPositions.MID);
+        setGoal(2.07);
         break;
       case HIGH:
-        setpoint = armSetpoints.get(armPositions.HIGH);
+        setGoal(3.4);
         break;
       case SHELF:
-        setpoint = armSetpoints.get(armPositions.SHELF);
+        setGoal(3.4);
         break;
       case STOW:
-        setpoint = armSetpoints.get(armPositions.STOW);
+        setGoal(1.6);
         break;
-    }
-
-    if (isAtLimit()) {
-      return;
-    }
-
-    motor1.setVoltage(pid.calculate(encoder.getDistance(), setpoint) + feedforward.calculate(setpoint, 0)); //TODO: Figure out feedforward method
-    motor2.setVoltage(pid.calculate(encoder.getDistance(), setpoint) + feedforward.calculate(setpoint, 0)); //TODO: Figure out feedforward method
-  }
-
-  public double getPos() {
-    return encoder.getAbsolutePosition();
-  }
-
-  private Boolean isAtLimit() {
-    if (getPos() >= topLimit || getPos() <= bottomLimit) {
-      return true;
-    } else {
-      return false;
     }
   }
 
   public void setL1() {
     moveToPos(armPositions.LOW);
-    
   }
 
   public void setL2() {
@@ -127,18 +103,20 @@ public class Arm extends SubsystemBase {
     moveToPos(armPositions.STOW);
   }
 
-  public void resetPID() {
-    pid.reset();  
+  @Override
+  public void useOutput(double output, TrapezoidProfile.State setpoint) {
+    double feedforward = m_feedforward.calculate(setpoint.position, setpoint.velocity);
+    motor1.setVoltage(output + feedforward);
+    motor2.setVoltage(output + feedforward);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Arm Encoder value", encoder.getAbsolutePosition());
+    super.periodic();
   }
 
   @Override
-  public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
+  public double getMeasurement() {
+    return encoder.getDistance();
   }
 }
