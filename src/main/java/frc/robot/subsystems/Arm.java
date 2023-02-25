@@ -35,6 +35,8 @@ public class Arm extends ProfiledPIDSubsystem {
 
   private final HashMap<armPositions, Double> armgoals = new HashMap<>();
 
+  private double goal;
+
   public Arm() {
     super(new ProfiledPIDController(
         Constants.Arm.kP,
@@ -83,8 +85,13 @@ public class Arm extends ProfiledPIDSubsystem {
     }
   }
 
+  public boolean atGoal() {
+    return encoder.getDistance()== goal;
+  }
+
   public void setL1() {
     moveToPos(armPositions.LOW);
+    goal = armgoals.get(armPositions.LOW);
   }
 
   public void setL2() {

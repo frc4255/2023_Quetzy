@@ -99,6 +99,8 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new testPath(s_Swerve, s_Intake);
+       // return new testPath(s_Swerve, s_Intake);
+
+       return new onePiece(s_Swerve, s_Arm, s_Wrist, s_Intake);
     }
 }
