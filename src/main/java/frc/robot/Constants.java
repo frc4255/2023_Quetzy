@@ -15,7 +15,7 @@ public final class Constants {
 
     public static final class Arm {
         //PID Constants
-        public static final double kP = 16.0;
+        public static final double kP = 13.0;
         public static final double kI = 0.00; //NO TOUCHIES
         public static final double kD = 0.00;
 

@@ -92,6 +92,11 @@ public class RobotContainer {
     private void configAutoChooser() {
     }
 
+    public void disableStuffFromAuto() {
+        s_Arm.disable();
+        s_Wrist.disable();
+    }
+
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
@@ -101,6 +106,6 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
        // return new testPath(s_Swerve, s_Intake);
 
-       return new onePiece(s_Swerve, s_Arm, s_Wrist, s_Intake);
+        return new onePiece(s_Swerve, s_Arm, s_Wrist, s_Intake);
     }
 }

@@ -69,7 +69,7 @@ public class Arm extends ProfiledPIDSubsystem {
         setGoal(1.68);
         break;
       case MID:
-        setGoal(2.07);
+        setGoal(2.1);
         break;
       case HIGH:
         setGoal(3.4);

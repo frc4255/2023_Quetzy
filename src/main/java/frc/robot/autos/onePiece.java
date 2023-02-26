@@ -6,6 +6,7 @@ import frc.robot.autos.autoCommands.ArmL3;
 import frc.robot.autos.autoCommands.AutoHighArm;
 import frc.robot.autos.autoCommands.WristL3;
 import frc.robot.commands.otherIntakerun;
+import frc.robot.commands.runIntake;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.Intake;
@@ -21,7 +22,7 @@ public class onePiece extends SequentialCommandGroup {
             new InstantCommand(() -> s_Swerve.zeroGyro()),
             new ArmL3(s_Arm),
             new WristL3(s_Wrist),
-            new otherIntakerun(s_Intake).repeatedly()
+            new runIntake(s_Intake).repeatedly()
         );
     }
 }
