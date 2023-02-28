@@ -81,11 +81,11 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         runIntake.whileTrue(new runIntake(s_Intake));
         otherIntake.whileTrue(new otherIntakerun(s_Intake));
-        setStow.onTrue(new StowArm(s_Arm, s_Wrist));
-        setL2.onTrue(new MidArm(s_Arm, s_Wrist));
-        setL3.onTrue(new HighArm(s_Arm, s_Wrist));
-        setL1.onTrue(new LowArm(s_Arm, s_Wrist));
-        setShelf.onTrue(new ShelfArm(s_Arm, s_Wrist));
+        setStow.onTrue(new Stow(s_Arm, s_Wrist));
+        setL2.onTrue(new MiddleNode(s_Arm, s_Wrist));
+        setL3.onTrue(new HighNode(s_Arm, s_Wrist));
+        setL1.onTrue(new BottomNode(s_Arm, s_Wrist));
+        setShelf.onTrue(new Shelf(s_Arm, s_Wrist));
 
     }
 
@@ -106,6 +106,6 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
        // return new testPath(s_Swerve, s_Intake);
 
-        return new onePiece(s_Swerve, s_Arm, s_Wrist, s_Intake);
+        return new twoPieceEngage(s_Swerve, s_Intake, s_Arm, s_Wrist);
     }
 }

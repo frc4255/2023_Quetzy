@@ -4,14 +4,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Wrist;
-import com.pathplanner.lib.PathPlannerTrajectory;
-public class AutoHighArm extends CommandBase{
+public class AutoHighNode extends CommandBase{
     
     private final Arm m_Arm;
     private final Wrist m_Wrist;
     private boolean hasWaited = false;
 
-    public AutoHighArm(Arm m_Arm, Wrist m_Wrist) {
+    public AutoHighNode(Arm m_Arm, Wrist m_Wrist) {
         this.m_Arm = m_Arm;
         this.m_Wrist = m_Wrist;
 
@@ -34,7 +33,7 @@ public class AutoHighArm extends CommandBase{
       hasWaited = true;
       m_Wrist.enable();
     }
-    
+
     m_Wrist.setL3();
   }
 

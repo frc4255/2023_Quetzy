@@ -127,8 +127,15 @@ public class Swerve extends SubsystemBase {
                  true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
                  this // Requires this drive subsystem
             );
-     }
+    }
 
+    public double getRoll() {
+        return getRoll();
+    }
+
+    public double getPitch() {
+        return getPitch();
+    }
     @Override
     public void periodic(){
         swerveOdometry.update(getYaw(), getModulePositions());  

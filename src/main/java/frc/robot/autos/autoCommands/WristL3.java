@@ -1,10 +1,7 @@
 package frc.robot.autos.autoCommands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Wrist;
-import com.pathplanner.lib.PathPlannerTrajectory;
 public class WristL3 extends CommandBase{
     
     private final Wrist m_Wrist;
