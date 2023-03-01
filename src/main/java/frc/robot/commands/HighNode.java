@@ -13,7 +13,7 @@ public class HighNode extends ParallelCommandGroup{
         addCommands(
             new HighArm(s_Arm),
             new SequentialCommandGroup(
-                new WaitCommand(0.2),
+                new WaitCommand(0.4),
                 new HighWrist(s_Wrist)
             )
         );

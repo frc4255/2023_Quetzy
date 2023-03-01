@@ -13,7 +13,7 @@ public class Stow extends ParallelCommandGroup{
         addCommands(
             new StowWrist(s_Wrist),
             new SequentialCommandGroup(
-                new WaitCommand(0.2),
+                new WaitCommand(0.4),
                 new StowArm(s_Arm)
             )
         );

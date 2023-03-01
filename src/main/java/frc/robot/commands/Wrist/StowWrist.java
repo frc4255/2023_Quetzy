@@ -21,7 +21,7 @@ public class StowWrist extends CommandBase{
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Wrist.setL3();
+    m_Wrist.stow();
   }
 
   // Called once the command ends or is interrupted.
@@ -31,6 +31,10 @@ public class StowWrist extends CommandBase{
   // Returns true when the command should end.
   @Override
     public boolean isFinished() {
+      if (m_Wrist.isNearGoal("stow")) {
+        return true;
+      } else {
         return false;
+      }
     }
 }

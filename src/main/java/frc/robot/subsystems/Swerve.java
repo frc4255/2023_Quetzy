@@ -120,8 +120,8 @@ public class Swerve extends SubsystemBase {
                  traj, 
                  this::getPose, // Pose supplier
                  Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
-                 new PIDController(0, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-                 new PIDController(0, 0, 0), // Y controller (usually the same values as X controller)
+                 new PIDController(2.5, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                 new PIDController(2.5, 0, 0), // Y controller (usually the same values as X controller)
                  new PIDController(4.5, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
                  this::setModuleStates, // Module states consumer
                  true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
@@ -130,15 +130,19 @@ public class Swerve extends SubsystemBase {
     }
 
     public double getRoll() {
-        return getRoll();
+        return gyro.getRoll();
     }
 
     public double getPitch() {
-        return getPitch();
+        return gyro.getPitch();
     }
     @Override
     public void periodic(){
-        swerveOdometry.update(getYaw(), getModulePositions());  
+        swerveOdometry.update(getYaw(), getModulePositions()); 
+        
+        SmartDashboard.putNumber("Gyro Pitch", getPitch());
+        SmartDashboard.putNumber("Gyro Roll", getRoll());
+        SmartDashboard.putNumber("Gyro roll w/ offset", 360 - getRoll());
 
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
