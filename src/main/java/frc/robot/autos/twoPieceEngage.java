@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class twoPieceEngage extends SequentialCommandGroup {
 
     public twoPieceEngage(Swerve s_Swerve, Intake s_Intake, Arm s_Arm, Wrist s_Wrist){
-        PathPlannerTrajectory path1 = PathPlanner.loadPath("2PE-1", 3, 2.5);
-        PathPlannerTrajectory path2 = PathPlanner.loadPath("2PE-2", 3, 2.5);
+        PathPlannerTrajectory path1 = PathPlanner.loadPath("2PE-1", 4, 3);
+        PathPlannerTrajectory path2 = PathPlanner.loadPath("2PE-2", 4, 3);
         PathPlannerTrajectory path3 = PathPlanner.loadPath("2PE-3", 3, 2);
 
         PPSwerveControllerCommand grab1Cone = s_Swerve.followTrajectoryCommand(path1);
@@ -29,17 +29,18 @@ public class twoPieceEngage extends SequentialCommandGroup {
         PPSwerveControllerCommand goToChargeStation = s_Swerve.followTrajectoryCommand(path3);
 
         addCommands(
-            new InstantCommand(() -> s_Swerve.zeroGyro()),
-            new InstantCommand(() -> s_Swerve.resetOdometry(path1.getInitialHolonomicPose())),
+            new InstantCommand(() -> s_Swerve.zeroGyro(), s_Swerve),
+            new InstantCommand(() -> s_Swerve.resetOdometry(path1.getInitialHolonomicPose()), s_Swerve),
+            new WaitCommand(0.1),
             new HighNode(s_Arm, s_Wrist),
             new runIntake(s_Intake).repeatedly().withTimeout(0.1),
             new Stow(s_Arm, s_Wrist),
             new ParallelCommandGroup(
                 grab1Cone,
                 new SequentialCommandGroup(
-                    new WaitCommand(2.95),
+                    new WaitCommand(1),
                     new BottomNode(s_Arm, s_Wrist),
-                    new otherIntakerun(s_Intake).repeatedly().withTimeout(0.4)
+                    new runIntake(s_Intake).repeatedly().withTimeout(0.7)
               )
             ),
             new ParallelCommandGroup(
@@ -48,8 +49,10 @@ public class twoPieceEngage extends SequentialCommandGroup {
             ),
             new HighNode(s_Arm, s_Wrist),
             new otherIntakerun(s_Intake).repeatedly().withTimeout(0.2),
-            new Stow(s_Arm, s_Wrist),
-            goToChargeStation
+            new ParallelCommandGroup(
+                new Stow(s_Arm, s_Wrist),
+                goToChargeStation
+            )
         );
     }
 }

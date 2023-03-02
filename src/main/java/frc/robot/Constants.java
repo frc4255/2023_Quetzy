@@ -25,8 +25,8 @@ public final class Constants {
         public static final double kV = 3;
 
         //Trapezodial Profile Constants
-        public static final double kMaxVelocityRads = 2;
-        public static final double kMaxAccelerationRads = 2;
+        public static final double kMaxVelocityRads = 3.5;
+        public static final double kMaxAccelerationRads = 3;
     }
 
     public static final class Wrist {
@@ -41,8 +41,8 @@ public final class Constants {
          public static final double kV = 1.43;
 
          //Trapezodial Profile Constants
-        public static final double kMaxVelocityRads = 2;
-        public static final double kMaxAccelerationRads = 2;
+        public static final double kMaxVelocityRads = 3.5;
+        public static final double kMaxAccelerationRads = 3;
  
     }
 
@@ -111,7 +111,7 @@ public final class Constants {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 3; //TODO: This must be tuned to specific robot (only works for closed loop/auto)
+        public static final double maxSpeed = 4; //TODO: This must be tuned to specific robot (only works for closed loop/auto)
         /** Radians per Second */
         public static final double maxAngularVelocity = 2.5; //TODO: This must be tuned to specific robot
 
@@ -162,7 +162,7 @@ public final class Constants {
     }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = 3;
+        public static final double kMaxSpeedMetersPerSecond = 4;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;

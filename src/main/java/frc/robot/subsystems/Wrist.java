@@ -43,7 +43,7 @@ public class Wrist extends ProfiledPIDSubsystem {
     );
 
    wristGoals.put(wristPositions.STOW, 4.38);
-   wristGoals.put(wristPositions.LOW, 3.09);
+   wristGoals.put(wristPositions.LOW, 3.06);
    wristGoals.put(wristPositions.MID, 3.95);
    wristGoals.put(wristPositions.HIGH, 3.45);
    wristGoals.put(wristPositions.SHELF, 3.2);
