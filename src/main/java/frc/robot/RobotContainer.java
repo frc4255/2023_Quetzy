@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.autos.*;
+import frc.robot.autos.autoCommands.autoDock;
 import frc.robot.commands.*;
 import frc.robot.commands.Arm.HighArm;
 import frc.robot.commands.Arm.LowArm;
@@ -84,7 +85,8 @@ public class RobotContainer {
         otherIntake.whileTrue(new otherIntakerun(s_Intake));
         setStow.onTrue(new Stow(s_Arm, s_Wrist));
         setL2.onTrue(new MiddleNode(s_Arm, s_Wrist));
-        setL3.onTrue(new HighNode(s_Arm, s_Wrist));
+        setL3.onTrue(new autoDock(s_Swerve));
+       // setL3.onTrue(new HighNode(s_Arm, s_Wrist));
         setL1.onTrue(new BottomNode(s_Arm, s_Wrist));
         setShelf.onTrue(new Shelf(s_Arm, s_Wrist));
 

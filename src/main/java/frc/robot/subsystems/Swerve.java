@@ -133,11 +133,12 @@ public class Swerve extends SubsystemBase {
 
         double value = 0;
         
-        if (getRoll() > 0) {
+        if (gyro.getRoll() > 0) {
             value = gyro.getRoll() - 178.62;
-        } else if (getRoll() < 0) {
+        } else if (gyro.getRoll() < 0) {
             value = gyro.getRoll() + 181.38;
         }
+        
         return value;
     }
 

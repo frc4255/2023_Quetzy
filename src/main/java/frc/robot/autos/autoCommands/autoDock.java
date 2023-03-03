@@ -21,9 +21,10 @@ public class autoDock extends CommandBase{
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    tilt = new Translation2d(m_Swerve.getRoll(), m_Swerve.getPitch()); // TODO: switch them?? 
+    
+    tilt = new Translation2d(m_Swerve.getPitch(), m_Swerve.getRoll()); // TODO: switch them?? 
 
-    m_Swerve.drive(tilt.times(0.2), 0, false, false);
+    m_Swerve.drive(tilt.times(0.03), 0, false, false);
   }
 
   // Called once the command ends or is interrupted.
@@ -33,6 +34,11 @@ public class autoDock extends CommandBase{
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+
+    if (m_Swerve.getPitch() > -12 && m_Swerve.getPitch() < 12) {
+      return true; 
+    } else {
+      return false;
+    }
   }
 }
