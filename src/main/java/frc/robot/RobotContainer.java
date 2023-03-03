@@ -48,6 +48,7 @@ public class RobotContainer {
     private final JoystickButton setShelf = new JoystickButton(testingController, XboxController.Button.kY.value);
 
     /* Subsystems */
+    private final RobotState s_RobotState = new RobotState();
     private final Swerve s_Swerve = new Swerve();
     private final Arm s_Arm = new Arm();
     private final Wrist s_Wrist = new Wrist();

@@ -130,7 +130,15 @@ public class Swerve extends SubsystemBase {
     }
 
     public double getRoll() {
-        return gyro.getRoll();
+
+        double value = 0;
+        
+        if (getRoll() > 0) {
+            value = gyro.getRoll() - 178.62;
+        } else if (getRoll() < 0) {
+            value = gyro.getRoll() + 181.38;
+        }
+        return value;
     }
 
     public double getPitch() {
