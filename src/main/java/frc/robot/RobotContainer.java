@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.autos.*;
 import frc.robot.commands.*;
@@ -46,10 +48,12 @@ public class RobotContainer {
     private final JoystickButton setShelf = new JoystickButton(testingController, XboxController.Button.kY.value);
 
     /* Subsystems */
+    private final RobotState s_RobotState = new RobotState();
     private final Swerve s_Swerve = new Swerve();
-    private final Arm s_Arm = new Arm();
-    private final Wrist s_Wrist = new Wrist();
+    private final Arm s_Arm = new Arm(s_RobotState);
+    private final Wrist s_Wrist = new Wrist(s_RobotState);
     private final Intake s_Intake = new Intake();
+
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -78,12 +82,20 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         runIntake.whileTrue(new runIntake(s_Intake));
         otherIntake.whileTrue(new otherIntakerun(s_Intake));
-        setStow.onTrue(new StowArm(s_Arm, s_Wrist));
-        setL2.onTrue(new MidArm(s_Arm, s_Wrist));
-        setL3.onTrue(new HighArm(s_Arm, s_Wrist));
-        setL1.onTrue(new LowArm(s_Arm, s_Wrist));
-        setShelf.onTrue(new ShelfArm(s_Arm, s_Wrist));
+        setStow.onTrue(new Stow(s_Arm, s_Wrist));
+        setL2.onTrue(new MiddleNode(s_Arm, s_Wrist));
+        setL3.onTrue(new HighNode(s_Arm, s_Wrist));
+        setL1.onTrue(new BottomNode(s_Arm, s_Wrist));
+        setShelf.onTrue(new Shelf(s_Arm, s_Wrist));
 
+    }
+
+    private void configAutoChooser() {
+    }
+
+    public void disableStuffFromAuto() {
+        s_Arm.disable();
+        s_Wrist.disable();
     }
 
     /**
@@ -93,6 +105,8 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
+       // return new testPath(s_Swerve, s_Intake);
+
+        return new twoPieceEngage(s_Swerve, s_Intake, s_Arm, s_Wrist);
     }
 }

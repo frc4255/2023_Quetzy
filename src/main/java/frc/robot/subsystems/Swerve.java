@@ -9,6 +9,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
+import edu.wpi.first.math.controller.PIDController;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -111,9 +115,42 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    public PPSwerveControllerCommand followTrajectoryCommand(PathPlannerTrajectory traj) {
+            return new PPSwerveControllerCommand(
+                 traj, 
+                 this::getPose, // Pose supplier
+                 Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
+                 new PIDController(3.25, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                 new PIDController(3.25, 0, 0), // Y controller (usually the same values as X controller)
+                 new PIDController(4.75, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+                 this::setModuleStates, // Module states consumer
+                 true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+                 this // Requires this drive subsystem
+            );
+    }
+
+    public double getRoll() {
+
+        double value = 0;
+        
+        if (getRoll() > 0) {
+            value = gyro.getRoll() - 178.62;
+        } else if (getRoll() < 0) {
+            value = gyro.getRoll() + 181.38;
+        }
+        return value;
+    }
+
+    public double getPitch() {
+        return gyro.getPitch();
+    }
     @Override
     public void periodic(){
-        swerveOdometry.update(getYaw(), getModulePositions());  
+        swerveOdometry.update(getYaw(), getModulePositions()); 
+        
+        SmartDashboard.putNumber("Gyro Pitch", getPitch());
+        SmartDashboard.putNumber("Gyro Roll", getRoll());
+        SmartDashboard.putNumber("Gyro roll w/ offset", 360 - getRoll());
 
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());

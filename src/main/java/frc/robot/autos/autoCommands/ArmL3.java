@@ -1,28 +1,27 @@
-package frc.robot.commands.Arm;
+package frc.robot.autos.autoCommands;
 
-import frc.robot.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Arm;
+public class ArmL3 extends CommandBase{
+    
+    private final Arm m_Arm;
 
+    public ArmL3(Arm m_Arm) {
+        this.m_Arm = m_Arm;
 
-public class StowArm extends CommandBase {
-  private final Arm s_Arm;
+        addRequirements(m_Arm);
+    }
 
-  public StowArm(Arm s_Arm) {
-    this.s_Arm = s_Arm;
-
-    addRequirements(s_Arm);
-  }
-
-  // Called when the command is initially scheduled.
+// Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    s_Arm.enable();
+    m_Arm.enable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    s_Arm.stow();
+    m_Arm.setL3();
   }
 
   // Called once the command ends or is interrupted.
@@ -32,7 +31,8 @@ public class StowArm extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (s_Arm.isNearGoal("stow")) {
+
+    if (m_Arm.isNearGoal("high")) {
       return true;
     } else {
       return false;
