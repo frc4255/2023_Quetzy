@@ -7,7 +7,7 @@ public class RobotState {
     private Spark rightLEDs;
     private Spark leftLEDs;
 
-    private enum robotStates {
+    public enum robotStates {
         CUBE, //101
         CONE, //102
         ENCODER_DISCONNECTED, //401

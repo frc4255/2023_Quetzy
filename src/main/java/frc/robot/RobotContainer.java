@@ -50,8 +50,8 @@ public class RobotContainer {
     /* Subsystems */
     private final RobotState s_RobotState = new RobotState();
     private final Swerve s_Swerve = new Swerve();
-    private final Arm s_Arm = new Arm();
-    private final Wrist s_Wrist = new Wrist();
+    private final Arm s_Arm = new Arm(s_RobotState);
+    private final Wrist s_Wrist = new Wrist(s_RobotState);
     private final Intake s_Intake = new Intake();
 
 
