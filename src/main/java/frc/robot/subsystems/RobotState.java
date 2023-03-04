@@ -10,6 +10,8 @@ public class RobotState {
     public enum robotStates {
         CUBE, //101
         CONE, //102
+        NOT_BALANCED, //201
+        BALANCED, //202
         ENCODER_DISCONNECTED, //401
         CAN_BUS_ERROR, //402
         IDLE, //103
@@ -21,7 +23,7 @@ public class RobotState {
 
     public RobotState() {
         rightLEDs = new Spark(1);
-        leftLEDs = new Spark(2);
+        leftLEDs = new Spark(0);
 
         rightLEDs.set(-0.99);
         leftLEDs.set(-0.99);
@@ -44,6 +46,15 @@ public class RobotState {
                 rightLEDs.set(-0.99);
                 leftLEDs.set(-0.99);
                 break;
+            case 201:
+                currentState = robotStates.NOT_BALANCED;
+                rightLEDs.set(-0.21);
+                leftLEDs.set(-0.21);
+                break;
+            case 202:
+                currentState = robotStates.BALANCED;
+                rightLEDs.set(0.93);
+                leftLEDs.set(0.93);
             case 401:
                 currentState = robotStates.ENCODER_DISCONNECTED;
                 rightLEDs.set(-0.11);
