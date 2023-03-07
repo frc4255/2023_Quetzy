@@ -22,7 +22,7 @@ public class RobotState {
     
 
     private robotStates currentState = robotStates.IDLE;
-
+    private robotStates lastState = robotStates.IDLE;
     public RobotState() {
         rightLEDs = new Spark(1);
         leftLEDs = new Spark(0);
@@ -32,6 +32,9 @@ public class RobotState {
     }
 
     public void toggleState(int desiredState) {
+
+        lastState = currentState;
+
         switch (desiredState) {
             case 101:
                 currentState = robotStates.CUBE;
@@ -50,8 +53,8 @@ public class RobotState {
                 break;
             case 104:
                 currentState = robotStates.HAS_CUBE;
-                //rightLEDs.set();
-                //leftLEDs.set();
+                rightLEDs.set(-0.07);
+                leftLEDs.set(-0.07);
                 break;
             case 105:
                 currentState = robotStates.HAS_CONE;
@@ -88,5 +91,9 @@ public class RobotState {
 
     public robotStates getCurrentState() {
         return currentState;
+    }
+
+    public robotStates getLastState() {
+        return lastState;
     }
 }
