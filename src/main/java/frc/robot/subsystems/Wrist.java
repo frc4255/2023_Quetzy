@@ -5,6 +5,7 @@ import java.util.HashMap;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 
 import frc.robot.Constants;
+import frc.robot.subsystems.RobotState.robotStates;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -23,6 +24,8 @@ public class Wrist extends ProfiledPIDSubsystem {
 
   private ArmFeedforward m_feedforward;
 
+  private RobotState s_RobotState;
+
   private enum wristPositions {
     STOW,
     LOW,
@@ -31,9 +34,12 @@ public class Wrist extends ProfiledPIDSubsystem {
     SHELF
   }
 
-  private final HashMap<wristPositions, Double> wristGoals = new HashMap<>();
+  private final HashMap<wristPositions, Double> cubeGoals = new HashMap<>();
+  private final HashMap<wristPositions, Double> coneGoals = new HashMap<>();
 
-  public Wrist() {
+  private HashMap<wristPositions, Double> goal;
+
+  public Wrist(RobotState s_RobotState) {
 
     super(new ProfiledPIDController(
         Constants.Wrist.kP,
@@ -42,11 +48,21 @@ public class Wrist extends ProfiledPIDSubsystem {
         new TrapezoidProfile.Constraints(Constants.Wrist.kMaxVelocityRads, Constants.Wrist.kMaxAccelerationRads))
     );
 
-   wristGoals.put(wristPositions.STOW, 4.38);
-   wristGoals.put(wristPositions.LOW, 3.06);
-   wristGoals.put(wristPositions.MID, 3.95);
-   wristGoals.put(wristPositions.HIGH, 3.45);
-   wristGoals.put(wristPositions.SHELF, 3.2);
+    this.s_RobotState = s_RobotState;
+
+    //TODO: Set wrist cube goals
+   cubeGoals.put(wristPositions.STOW, 4.38);
+   cubeGoals.put(wristPositions.LOW, 3.06);
+   cubeGoals.put(wristPositions.MID, 3.95);
+   cubeGoals.put(wristPositions.HIGH, 3.45);
+   cubeGoals.put(wristPositions.SHELF, 3.2);
+
+   //TODO: Set wrist cone goals
+   coneGoals.put(wristPositions.STOW, 4.38);
+   coneGoals.put(wristPositions.LOW, 3.06);
+   coneGoals.put(wristPositions.MID, 3.95);
+   coneGoals.put(wristPositions.HIGH, 3.45);
+   coneGoals.put(wristPositions.SHELF, 3.2);
 
     encoder = new DutyCycleEncoder(0);
     encoder.setDistancePerRotation(2 * Math.PI);
@@ -60,44 +76,56 @@ public class Wrist extends ProfiledPIDSubsystem {
   }
 
   private void moveToPos(wristPositions pos) {
+
+    if (s_RobotState.getCurrentState() == robotStates.CUBE) {
+      goal = cubeGoals;
+    } else {
+      goal = coneGoals;
+    }
+
+    if (!encoder.isConnected()) {
+      s_RobotState.toggleState(401);
+      return;
+    }
+
     switch (pos) {
       case LOW:
-        setGoal(wristGoals.get(wristPositions.LOW));
+        setGoal(goal.get(wristPositions.LOW));
         break;
       case MID:
-        setGoal(wristGoals.get(wristPositions.MID));
+        setGoal(goal.get(wristPositions.MID));
         break;
       case HIGH:
-        setGoal(wristGoals.get(wristPositions.HIGH));
+        setGoal(goal.get(wristPositions.HIGH));
         break;
       case SHELF:
-        setGoal(wristGoals.get(wristPositions.SHELF));
+        setGoal(goal.get(wristPositions.SHELF));
         break;
       case STOW:
-        setGoal(wristGoals.get(wristPositions.STOW));
+        setGoal(goal.get(wristPositions.STOW));
         break;
     }
   }
 
-  public boolean isNearGoal(String goal) {
+  public boolean isNearGoal(String whatGoal) {
 
     double goalPos = 4.38;
 
-    switch (goal.toLowerCase()) {
+    switch (whatGoal.toLowerCase()) {
       case "low":
-        goalPos = wristGoals.get(wristPositions.LOW);
+        goalPos = goal.get(wristPositions.LOW);
         break;
       case "mid":
-        goalPos = wristGoals.get(wristPositions.MID);
+        goalPos = goal.get(wristPositions.MID);
         break;
       case "high":
-        goalPos = wristGoals.get(wristPositions.HIGH);
+        goalPos = goal.get(wristPositions.HIGH);
         break;
       case "shelf":
-        goalPos = wristGoals.get(wristPositions.SHELF);
+        goalPos = goal.get(wristPositions.SHELF);
         break;
       case "stow":
-        goalPos = wristGoals.get(wristPositions.STOW);
+        goalPos = goal.get(wristPositions.STOW);
         break;
     } 
 
