@@ -10,6 +10,8 @@ public class RobotState {
     public enum robotStates {
         CUBE, //101
         CONE, //102
+        HAS_CUBE, //104
+        HAS_CONE, //105
         NOT_BALANCED, //201
         BALANCED, //202
         ENCODER_DISCONNECTED, //401
@@ -45,6 +47,16 @@ public class RobotState {
                 currentState = robotStates.IDLE;
                 rightLEDs.set(-0.99);
                 leftLEDs.set(-0.99);
+                break;
+            case 104:
+                currentState = robotStates.HAS_CUBE;
+                //rightLEDs.set();
+                //leftLEDs.set();
+                break;
+            case 105:
+                currentState = robotStates.HAS_CONE;
+                //rightLEDs.set();
+                //leftLEDs.set();
                 break;
             case 201:
                 currentState = robotStates.NOT_BALANCED;

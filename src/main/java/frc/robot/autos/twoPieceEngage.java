@@ -1,5 +1,6 @@
 package frc.robot.autos;
 
+import frc.robot.RobotContainer;
 import frc.robot.autos.autoCommands.autoDock;
 import frc.robot.commands.BottomNode;
 import frc.robot.commands.HighNode;
@@ -19,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class twoPieceEngage extends SequentialCommandGroup {
 
-    public twoPieceEngage(Swerve s_Swerve, Intake s_Intake, Arm s_Arm, Wrist s_Wrist){
+    public twoPieceEngage(Swerve s_Swerve, Intake s_Intake, Arm s_Arm, Wrist s_Wrist, RobotContainer m_RobotContainer, RobotState s_RobotState){
         PathPlannerTrajectory path1 = PathPlanner.loadPath("2PE-1", 4, 3);
         PathPlannerTrajectory path2 = PathPlanner.loadPath("2PE-2", 4, 3);
         PathPlannerTrajectory path3 = PathPlanner.loadPath("2PE-3", 3, 2);
@@ -33,14 +34,14 @@ public class twoPieceEngage extends SequentialCommandGroup {
             new InstantCommand(() -> s_Swerve.resetOdometry(path1.getInitialHolonomicPose()), s_Swerve),
             new WaitCommand(0.1),
             new HighNode(s_Arm, s_Wrist),
-            new runIntake(s_Intake).repeatedly().withTimeout(0.1),
+            new runIntake(s_Intake, m_RobotContainer, s_RobotState).repeatedly().withTimeout(0.1),
             new Stow(s_Arm, s_Wrist),
             new ParallelCommandGroup(
                 grab1Cone,
                 new SequentialCommandGroup(
                     new WaitCommand(1),
                     new BottomNode(s_Arm, s_Wrist),
-                    new runIntake(s_Intake).repeatedly().withTimeout(0.7)
+                    new runIntake(s_Intake, m_RobotContainer, s_RobotState).repeatedly().withTimeout(0.7)
               )
             ),
             new ParallelCommandGroup(

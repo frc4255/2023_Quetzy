@@ -26,4 +26,11 @@ public class Intake extends SubsystemBase {
         motor.set(ControlMode.PercentOutput, 0.0);
     }
 
+    public boolean hasObject() {
+        if (motor.getStatorCurrent() > 60) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

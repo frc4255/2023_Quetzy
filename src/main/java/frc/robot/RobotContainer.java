@@ -79,7 +79,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        runIntake.whileTrue(new runIntake(s_Intake));
+        runIntake.whileTrue(new runIntake(s_Intake, this, s_RobotState));
         otherIntake.whileTrue(new otherIntakerun(s_Intake));
         setStow.onTrue(new Stow(s_Arm, s_Wrist));
         setL2.onTrue(new MiddleNode(s_Arm, s_Wrist));
@@ -104,6 +104,10 @@ public class RobotContainer {
         s_RobotState.toggleState(102);
     }
 
+    public Joystick getController() {
+        return driver;
+}
+
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
@@ -113,6 +117,6 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
        // return new testPath(s_Swerve, s_Intake);
 
-        return new twoPieceEngage(s_Swerve, s_Intake, s_Arm, s_Wrist);
+        return new twoPieceEngage(s_Swerve, s_Intake, s_Arm, s_Wrist, this, s_RobotState);
     }
 }
