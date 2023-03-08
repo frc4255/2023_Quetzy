@@ -80,7 +80,7 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
         runIntake.whileTrue(new runIntake(s_Intake, this, s_RobotState));
-        otherIntake.whileTrue(new otherIntakerun(s_Intake));
+        otherIntake.whileTrue(new otherIntakerun(s_Intake, this, s_RobotState));
         setStow.onTrue(new Stow(s_Arm, s_Wrist));
         setL2.onTrue(new MiddleNode(s_Arm, s_Wrist));
         setL3.onTrue(new autoDock(s_Swerve, s_RobotState));

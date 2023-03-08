@@ -10,8 +10,7 @@ public class RobotState {
     public enum robotStates {
         CUBE, //101
         CONE, //102
-        HAS_CUBE, //104
-        HAS_CONE, //105
+        HAS_OBJECT, //104
         NOT_BALANCED, //201
         BALANCED, //202
         ENCODER_DISCONNECTED, //401
@@ -52,14 +51,9 @@ public class RobotState {
                 leftLEDs.set(-0.99);
                 break;
             case 104:
-                currentState = robotStates.HAS_CUBE;
-                rightLEDs.set(-0.07);
-                leftLEDs.set(-0.07);
-                break;
-            case 105:
-                currentState = robotStates.HAS_CONE;
-                //rightLEDs.set();
-                //leftLEDs.set();
+                currentState = robotStates.HAS_OBJECT;
+                rightLEDs.set(-0.91); //TODO: Setup REV Blinkin to have green as color 1 or 2
+                leftLEDs.set(-0.91);
                 break;
             case 201:
                 currentState = robotStates.NOT_BALANCED;

@@ -49,7 +49,7 @@ public class twoPieceEngage extends SequentialCommandGroup {
                 alignToCube
             ),
             new HighNode(s_Arm, s_Wrist),
-            new otherIntakerun(s_Intake).repeatedly().withTimeout(0.2),
+            new otherIntakerun(s_Intake, m_RobotContainer, s_RobotState).repeatedly().withTimeout(0.2),
             new ParallelCommandGroup(
                 new Stow(s_Arm, s_Wrist),
                 goToChargeStation

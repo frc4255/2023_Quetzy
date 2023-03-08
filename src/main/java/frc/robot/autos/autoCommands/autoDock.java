@@ -33,7 +33,7 @@ public class autoDock extends CommandBase{
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    tilt = new Translation2d(rollPID.calculate(m_Swerve.getPitch() * -1, 0), pitchPID.calculate(m_Swerve.getRoll(), 0)); //TODO: robot might be backwards lol
+    tilt = new Translation2d(rollPID.calculate(m_Swerve.getPitch() * -1, 0), pitchPID.calculate(m_Swerve.getRoll(), 0));
 
     if (Math.abs(m_Swerve.getRoll()) < 2.5 && Math.abs(m_Swerve.getPitch()) < 2.5) {
       s_RobotState.toggleState(202);
