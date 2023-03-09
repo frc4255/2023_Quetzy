@@ -83,8 +83,7 @@ public class RobotContainer {
         otherIntake.whileTrue(new otherIntakerun(s_Intake, this, s_RobotState));
         setStow.onTrue(new Stow(s_Arm, s_Wrist));
         setL2.onTrue(new MiddleNode(s_Arm, s_Wrist));
-        setL3.onTrue(new autoDock(s_Swerve, s_RobotState));
-       // setL3.onTrue(new HighNode(s_Arm, s_Wrist));
+        setL3.onTrue(new HighNode(s_Arm, s_Wrist));
         setL1.onTrue(new BottomNode(s_Arm, s_Wrist));
         setShelf.onTrue(new Shelf(s_Arm, s_Wrist));
         coneState.onTrue(new InstantCommand(() -> s_RobotState.toggleState(102)));

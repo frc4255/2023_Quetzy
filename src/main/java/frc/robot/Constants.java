@@ -15,7 +15,7 @@ public final class Constants {
 
     public static final class Arm {
         //PID Constants
-        public static final double kP = 13.0;
+        public static final double kP = 5.0;
         public static final double kI = 0.00; //NO TOUCHIES
         public static final double kD = 0.00;
 
@@ -25,13 +25,13 @@ public final class Constants {
         public static final double kV = 3;
 
         //Trapezodial Profile Constants
-        public static final double kMaxVelocityRads = 3.5;
-        public static final double kMaxAccelerationRads = 3;
+        public static final double kMaxVelocityRads = 3;
+        public static final double kMaxAccelerationRads = 4;
     }
 
     public static final class Wrist {
         //PID Constants
-         public static final double kP = 17.0;
+         public static final double kP = 13.0;
          public static final double kI = 0.00;
          public static final double kD = 0.00;
  
@@ -41,8 +41,8 @@ public final class Constants {
          public static final double kV = 1.43;
 
          //Trapezodial Profile Constants
-        public static final double kMaxVelocityRads = 3.5;
-        public static final double kMaxAccelerationRads = 3;
+        public static final double kMaxVelocityRads = 3;
+        public static final double kMaxAccelerationRads = 3.5;
  
     }
 

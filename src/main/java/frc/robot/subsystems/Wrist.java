@@ -11,7 +11,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
@@ -52,17 +52,17 @@ public class Wrist extends ProfiledPIDSubsystem {
 
     //TODO: Set wrist cube goals
    cubeGoals.put(wristPositions.STOW, 4.38);
-   cubeGoals.put(wristPositions.LOW, 3.06);
+   cubeGoals.put(wristPositions.LOW, 3.15);
    cubeGoals.put(wristPositions.MID, 3.95);
-   cubeGoals.put(wristPositions.HIGH, 3.45);
+   cubeGoals.put(wristPositions.HIGH, 3.8);
    cubeGoals.put(wristPositions.SHELF, 3.2);
 
    //TODO: Set wrist cone goals
    coneGoals.put(wristPositions.STOW, 4.38);
-   coneGoals.put(wristPositions.LOW, 3.06);
-   coneGoals.put(wristPositions.MID, 3.95);
+   coneGoals.put(wristPositions.LOW, 3.185);
+   coneGoals.put(wristPositions.MID, 4.05);
    coneGoals.put(wristPositions.HIGH, 3.45);
-   coneGoals.put(wristPositions.SHELF, 3.2);
+   coneGoals.put(wristPositions.SHELF, 3.4);
 
     encoder = new DutyCycleEncoder(0);
     encoder.setDistancePerRotation(2 * Math.PI);
@@ -159,6 +159,8 @@ public class Wrist extends ProfiledPIDSubsystem {
   @Override
   public void periodic() {
     super.periodic();
+
+    SmartDashboard.putNumber("Wrist angle", getMeasurement());
   }
 
   @Override

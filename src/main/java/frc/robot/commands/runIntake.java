@@ -14,6 +14,7 @@ public class runIntake extends CommandBase {
   private final RobotContainer m_robotContainer;
   private final RobotState s_RobotState;
   private final Timer m_Timer;
+  private boolean commandForExtake = false;
 
 
   public runIntake(Intake m_Intake, RobotContainer m_Robotcontainer, RobotState s_RobotState) {
@@ -36,8 +37,12 @@ public class runIntake extends CommandBase {
   @Override
   public void execute() {
     if (m_Intake.hasObject()) { //If a cube has been picked up
-      m_robotContainer.getController().setRumble(RumbleType.kBothRumble, 0.5);
-      s_RobotState.toggleState(104);
+      m_robotContainer.getController().setRumble(RumbleType.kBothRumble, 1);
+     // s_RobotState.toggleState(104);
+    }
+
+    if (m_Intake.extookObject()) {
+      commandForExtake = true;
     }
   }
 
@@ -47,9 +52,9 @@ public class runIntake extends CommandBase {
     m_Intake.stop();
     m_robotContainer.getController().setRumble(RumbleType.kBothRumble, 0);
 
-    if (s_RobotState.getLastState() == robotStates.CONE) {
-      s_RobotState.toggleState(101);
-    }
+   // if (commandForExtake) {
+     // s_RobotState.toggleState(102);
+    //}
   }
 
   // Returns true when the command should end.

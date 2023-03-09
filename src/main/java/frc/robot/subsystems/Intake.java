@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -32,5 +33,18 @@ public class Intake extends SubsystemBase {
         } else {
             return false;
         }
+    }
+
+    public boolean extookObject() {
+        if (motor.getStatorCurrent() > 26 && motor.getStatorCurrent() < 30) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Motor current", motor.getStatorCurrent());
     }
 }
