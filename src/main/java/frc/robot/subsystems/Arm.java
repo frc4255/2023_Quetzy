@@ -10,7 +10,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.controller.ArmFeedforward;
@@ -50,15 +50,15 @@ public class Arm extends ProfiledPIDSubsystem {
     //TODO: Set arm cone goals
     coneGoals.put(armPositions.STOW, 1.6);
     coneGoals.put(armPositions.LOW, 1.68);
-    coneGoals.put(armPositions.MID, 2.1);
+    coneGoals.put(armPositions.MID, 2.2);
     coneGoals.put(armPositions.HIGH, 3.4);
-    coneGoals.put(armPositions.SHELF, 3.4);
+    coneGoals.put(armPositions.SHELF, 3.3);
 
     //TODO: Set arm cube goals
     cubeGoals.put(armPositions.STOW, 1.6);
     cubeGoals.put(armPositions.LOW, 1.68);
-    cubeGoals.put(armPositions.MID, 2.1);
-    cubeGoals.put(armPositions.HIGH, 3.4);
+    cubeGoals.put(armPositions.MID, 2.4);
+    cubeGoals.put(armPositions.HIGH, 3.1);
     cubeGoals.put(armPositions.SHELF, 3.4)
     ;
     encoder = new DutyCycleEncoder(1);
@@ -167,6 +167,8 @@ public class Arm extends ProfiledPIDSubsystem {
   @Override
   public void periodic() {
     super.periodic();
+
+    SmartDashboard.putNumber("Arm angle", encoder.getDistance());
   }
 
   @Override

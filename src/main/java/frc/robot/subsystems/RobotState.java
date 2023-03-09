@@ -31,46 +31,68 @@ public class RobotState {
     }
 
     public void toggleState(int desiredState) {
-
-        lastState = currentState;
-
+        
         switch (desiredState) {
             case 101:
+                if (robotStates.CUBE != currentState) {
+                    lastState = currentState;
+                }
                 currentState = robotStates.CUBE;
                 rightLEDs.set(0.91);
                 leftLEDs.set(0.91);
                 break;
             case 102:
+                if (robotStates.CONE != currentState) {
+                    lastState = currentState;
+                }
                 currentState = robotStates.CONE;
                 rightLEDs.set(0.69);
                 leftLEDs.set(0.69);
                 break;
             case 103:
+                if (robotStates.IDLE != currentState) {
+                    lastState = currentState;
+                }
                 currentState = robotStates.IDLE;
                 rightLEDs.set(-0.99);
                 leftLEDs.set(-0.99);
                 break;
             case 104:
+                if (robotStates.HAS_OBJECT != currentState) {
+                    lastState = currentState;
+                }
                 currentState = robotStates.HAS_OBJECT;
                 rightLEDs.set(-0.91); //TODO: Setup REV Blinkin to have green as color 1 or 2
                 leftLEDs.set(-0.91);
                 break;
             case 201:
+                if (robotStates.NOT_BALANCED != currentState) {
+                    lastState = currentState;
+                }
                 currentState = robotStates.NOT_BALANCED;
                 rightLEDs.set(-0.21);
                 leftLEDs.set(-0.21);
                 break;
             case 202:
+                if (robotStates.BALANCED != currentState) {
+                    lastState = currentState;
+                }
                 currentState = robotStates.BALANCED;
                 rightLEDs.set(0.93);
                 leftLEDs.set(0.93);
                 break;
             case 401:
+                if (robotStates.ENCODER_DISCONNECTED != currentState) {
+                    lastState = currentState;
+                }
                 currentState = robotStates.ENCODER_DISCONNECTED;
                 rightLEDs.set(-0.11);
                 leftLEDs.set(-0.11);
                 break;
             case 402:
+                if (robotStates.CAN_BUS_ERROR != currentState) {
+                    lastState = currentState;
+                }
                 currentState = robotStates.CAN_BUS_ERROR;
                 rightLEDs.set(-0.09);
                 leftLEDs.set(-0.09);

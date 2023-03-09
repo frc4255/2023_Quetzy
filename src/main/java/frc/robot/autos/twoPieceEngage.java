@@ -35,20 +35,23 @@ public class twoPieceEngage extends SequentialCommandGroup {
             new WaitCommand(0.1),
             new HighNode(s_Arm, s_Wrist),
             new runIntake(s_Intake, m_RobotContainer, s_RobotState).repeatedly().withTimeout(0.1),
-            new Stow(s_Arm, s_Wrist),
             new ParallelCommandGroup(
+                new InstantCommand(() -> s_RobotState.toggleState(101)),
                 grab1Cone,
                 new SequentialCommandGroup(
-                    new WaitCommand(1),
+                    new Stow(s_Arm, s_Wrist),
                     new BottomNode(s_Arm, s_Wrist),
                     new runIntake(s_Intake, m_RobotContainer, s_RobotState).repeatedly().withTimeout(0.7)
               )
             ),
             new ParallelCommandGroup(
-                new Stow(s_Arm, s_Wrist),
-                alignToCube
+                alignToCube,
+                new SequentialCommandGroup(
+                    new Stow(s_Arm, s_Wrist),
+                    new WaitCommand(0.5),
+                    new HighNode(s_Arm, s_Wrist)
+                )
             ),
-            new HighNode(s_Arm, s_Wrist),
             new otherIntakerun(s_Intake, m_RobotContainer, s_RobotState).repeatedly().withTimeout(0.2),
             new ParallelCommandGroup(
                 new Stow(s_Arm, s_Wrist),
