@@ -56,7 +56,8 @@ public class twoPieceEngage extends SequentialCommandGroup {
             new ParallelCommandGroup(
                 new Stow(s_Arm, s_Wrist),
                 goToChargeStation
-            )
+            ),
+            new autoDock(s_Swerve, s_RobotState)
         );
     }
 }

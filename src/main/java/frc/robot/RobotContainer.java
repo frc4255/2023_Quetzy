@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.ctre.phoenix.platform.can.AutocacheState;
 import com.fasterxml.jackson.databind.node.IntNode;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -53,6 +54,7 @@ public class RobotContainer {
     private final Wrist s_Wrist = new Wrist(s_RobotState);
     private final Intake s_Intake = new Intake();
 
+    public SendableChooser <Command> autoChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -68,6 +70,9 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+
+        configAutoChooser();
+
     }
 
     /**
@@ -92,6 +97,11 @@ public class RobotContainer {
     }
 
     private void configAutoChooser() {
+        autoChooser = new SendableChooser<>();
+        autoChooser.setDefaultOption("2PE", new twoPieceEngage(s_Swerve, s_Intake, s_Arm, s_Wrist, this, s_RobotState));
+        autoChooser.addOption("1PE", new onePieceEngage(s_Swerve, s_Intake, s_Arm, s_Wrist, this, s_RobotState));
+
+        SmartDashboard.putData(autoChooser);
     }
 
     public void disableStuffFromAuto() {
@@ -116,6 +126,6 @@ public class RobotContainer {
         // An ExampleCommand will run in autonomous
        // return new testPath(s_Swerve, s_Intake);
 
-        return new twoPieceEngage(s_Swerve, s_Intake, s_Arm, s_Wrist, this, s_RobotState);
+        return autoChooser.getSelected();
     }
 }
