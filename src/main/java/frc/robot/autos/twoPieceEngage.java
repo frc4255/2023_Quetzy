@@ -9,10 +9,12 @@ import frc.robot.commands.otherIntakerun;
 import frc.robot.commands.runIntake;
 import frc.robot.subsystems.*;
 
+import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -21,9 +23,12 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class twoPieceEngage extends SequentialCommandGroup {
 
     public twoPieceEngage(Swerve s_Swerve, Intake s_Intake, Arm s_Arm, Wrist s_Wrist, RobotContainer m_RobotContainer, RobotState s_RobotState){
-        PathPlannerTrajectory path1 = PathPlanner.loadPath("2PE-1", 4, 3);
-        PathPlannerTrajectory path2 = PathPlanner.loadPath("2PE-2", 4, 3);
-        PathPlannerTrajectory path3 = PathPlanner.loadPath("2PE-3", 3, 2);
+
+        PathPlannerTrajectory path1 = PathPlanner.loadPath("2PE-1", new PathConstraints(4, 3));
+        PathPlannerTrajectory path2 = PathPlanner.loadPath("2PE-2", new PathConstraints(4, 3));
+        PathPlannerTrajectory path3 = PathPlanner.loadPath("2PE-3", new PathConstraints(3, 2));
+
+        PathPlannerTrajectory transformed = PathPlannerTrajectory.transformTrajectoryForAlliance(path1, DriverStation.getAlliance());
 
         PPSwerveControllerCommand grab1Cone = s_Swerve.followTrajectoryCommand(path1);
         PPSwerveControllerCommand alignToCube = s_Swerve.followTrajectoryCommand(path2);
@@ -31,7 +36,7 @@ public class twoPieceEngage extends SequentialCommandGroup {
 
         addCommands(
             new InstantCommand(() -> s_Swerve.zeroGyro(), s_Swerve),
-            new InstantCommand(() -> s_Swerve.resetOdometry(path1.getInitialHolonomicPose()), s_Swerve),
+            new InstantCommand(() -> s_Swerve.resetOdometry(transformed.getInitialHolonomicPose()), s_Swerve),
             new WaitCommand(0.1),
             new HighNode(s_Arm, s_Wrist),
             new runIntake(s_Intake, m_RobotContainer, s_RobotState).repeatedly().withTimeout(0.1),
