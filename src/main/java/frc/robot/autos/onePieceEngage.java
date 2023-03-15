@@ -21,13 +21,11 @@ public class onePieceEngage extends SequentialCommandGroup {
     public onePieceEngage(Swerve s_Swerve, Intake s_Intake, Arm s_Arm, Wrist s_Wrist, RobotContainer m_RobotContainer, RobotState s_RobotState){
         PathPlannerTrajectory path = PathPlanner.loadPath("1PE", 4, 3);
 
-        PathPlannerTrajectory transformed = PathPlannerTrajectory.transformTrajectoryForAlliance(path, DriverStation.getAlliance());
-
         PPSwerveControllerCommand outAndIn = s_Swerve.followTrajectoryCommand(path);
 
         addCommands(
             new InstantCommand(() -> s_Swerve.zeroGyro(), s_Swerve),
-            new InstantCommand(() -> s_Swerve.resetOdometry(transformed.getInitialHolonomicPose()), s_Swerve),
+            new InstantCommand(() -> s_Swerve.resetOdometry(path), s_Swerve),
             new WaitCommand(0.1),
             new HighNode(s_Arm, s_Wrist),
             new runIntake(s_Intake, m_RobotContainer, s_RobotState).repeatedly().withTimeout(0.1),

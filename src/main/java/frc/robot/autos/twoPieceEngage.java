@@ -28,15 +28,13 @@ public class twoPieceEngage extends SequentialCommandGroup {
         PathPlannerTrajectory path2 = PathPlanner.loadPath("2PE-2", new PathConstraints(4, 3));
         PathPlannerTrajectory path3 = PathPlanner.loadPath("2PE-3", new PathConstraints(3, 2));
 
-        PathPlannerTrajectory transformed = PathPlannerTrajectory.transformTrajectoryForAlliance(path1, DriverStation.getAlliance());
-
         PPSwerveControllerCommand grab1Cone = s_Swerve.followTrajectoryCommand(path1);
         PPSwerveControllerCommand alignToCube = s_Swerve.followTrajectoryCommand(path2);
         PPSwerveControllerCommand goToChargeStation = s_Swerve.followTrajectoryCommand(path3);
 
         addCommands(
             new InstantCommand(() -> s_Swerve.zeroGyro(), s_Swerve),
-            new InstantCommand(() -> s_Swerve.resetOdometry(transformed.getInitialHolonomicPose()), s_Swerve),
+            new InstantCommand(() -> s_Swerve.resetOdometry(path1), s_Swerve),
             new WaitCommand(0.1),
             new HighNode(s_Arm, s_Wrist),
             new runIntake(s_Intake, m_RobotContainer, s_RobotState).repeatedly().withTimeout(0.1),

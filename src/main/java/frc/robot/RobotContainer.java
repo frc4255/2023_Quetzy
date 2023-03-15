@@ -3,6 +3,7 @@ package frc.robot;
 import com.ctre.phoenix.platform.can.AutocacheState;
 import com.fasterxml.jackson.databind.node.IntNode;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -18,11 +19,13 @@ import frc.robot.autos.autoCommands.autoDock;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
-
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in
+ * the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of
+ * the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
@@ -49,24 +52,26 @@ public class RobotContainer {
 
     /* Subsystems */
     private final RobotState s_RobotState = new RobotState();
-    private final Swerve s_Swerve = new Swerve();
+    private final Swerve s_Swerve = new Swerve(this);
     private final Arm s_Arm = new Arm(s_RobotState);
     private final Wrist s_Wrist = new Wrist(s_RobotState);
     private final Intake s_Intake = new Intake();
 
-    public SendableChooser <Command> autoChooser;
+    public SendableChooser<Command> autoChooser;
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    private DriverStation.Alliance allianceColor;
+
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
     public RobotContainer() {
         s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
-            )
-        );
+                new TeleopSwerve(
+                        s_Swerve,
+                        () -> -driver.getRawAxis(translationAxis),
+                        () -> -driver.getRawAxis(strafeAxis),
+                        () -> -driver.getRawAxis(rotationAxis),
+                        () -> robotCentric.getAsBoolean()));
 
         // Configure the button bindings
         configureButtonBindings();
@@ -76,9 +81,11 @@ public class RobotContainer {
     }
 
     /**
-     * Use this method to define your button->command mappings. Buttons can be created by
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
      * instantiating a {@link GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing
+     * it to a {@link
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
@@ -115,7 +122,15 @@ public class RobotContainer {
 
     public Joystick getController() {
         return driver;
-}
+    }
+
+    public void setAllianceColor() {
+        allianceColor = DriverStation.getAlliance();
+    }
+
+    public DriverStation.Alliance getAllianceColor() {
+        return allianceColor;
+    }
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -124,7 +139,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-       // return new testPath(s_Swerve, s_Intake);
+        // return new testPath(s_Swerve, s_Intake);
 
         return autoChooser.getSelected();
     }
