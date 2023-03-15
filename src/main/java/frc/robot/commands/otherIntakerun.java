@@ -4,8 +4,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import frc.robot.subsystems.RobotState;
-import frc.robot.subsystems.RobotState.robotStates;
 import frc.robot.RobotContainer;
 
 //Intake cone, extake cube
@@ -13,14 +11,11 @@ public class otherIntakerun extends CommandBase{
     
     private final Intake m_Intake;
     private final RobotContainer m_robotContainer;
-    private final RobotState s_RobotState;
     private final Timer m_Timer;
-    private boolean commandForExtake = false;
 
-    public otherIntakerun(Intake m_Intake, RobotContainer m_robotContainer, RobotState s_RobotState) {
+    public otherIntakerun(Intake m_Intake, RobotContainer m_robotContainer) {
         this.m_Intake = m_Intake;
         this.m_robotContainer = m_robotContainer;
-        this.s_RobotState = s_RobotState;
 
         m_Timer = new Timer();
 
@@ -39,12 +34,8 @@ public class otherIntakerun extends CommandBase{
   public void execute() {
     if (m_Intake.hasObject()) {
       m_robotContainer.getController().setRumble(RumbleType.kBothRumble, 1);
-     // s_RobotState.toggleState(104);
     }
 
-    if (m_Intake.extookObject()) {
-      commandForExtake = true;
-    }
   }
 
   // Called once the command ends or is interrupted.
@@ -52,11 +43,6 @@ public class otherIntakerun extends CommandBase{
   public void end(boolean interrupted) {
     m_Intake.stop();
     m_robotContainer.getController().setRumble(RumbleType.kBothRumble, 0);
-
-   // if (commandForExtake) {
-    //  s_RobotState.toggleState(101);
-   // }
-    
   }
 
   // Returns true when the command should end.

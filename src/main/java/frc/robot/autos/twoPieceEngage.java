@@ -14,7 +14,6 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -37,14 +36,14 @@ public class twoPieceEngage extends SequentialCommandGroup {
             new InstantCommand(() -> s_Swerve.resetOdometry(path1), s_Swerve),
             new WaitCommand(0.1),
             new HighNode(s_Arm, s_Wrist),
-            new runIntake(s_Intake, m_RobotContainer, s_RobotState).repeatedly().withTimeout(0.1),
+            new runIntake(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.1),
             new ParallelCommandGroup(
                 new InstantCommand(() -> s_RobotState.toggleState(101)),
                 grab1Cone,
                 new SequentialCommandGroup(
                     new Stow(s_Arm, s_Wrist),
                     new BottomNode(s_Arm, s_Wrist),
-                    new runIntake(s_Intake, m_RobotContainer, s_RobotState).repeatedly().withTimeout(0.7)
+                    new runIntake(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.7)
               )
             ),
             new ParallelCommandGroup(
@@ -55,7 +54,7 @@ public class twoPieceEngage extends SequentialCommandGroup {
                     new HighNode(s_Arm, s_Wrist)
                 )
             ),
-            new otherIntakerun(s_Intake, m_RobotContainer, s_RobotState).repeatedly().withTimeout(0.2),
+            new otherIntakerun(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.2),
             new ParallelCommandGroup(
                 new Stow(s_Arm, s_Wrist),
                 goToChargeStation

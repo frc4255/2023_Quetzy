@@ -1,8 +1,5 @@
 package frc.robot;
 
-import com.ctre.phoenix.platform.can.AutocacheState;
-import com.fasterxml.jackson.databind.node.IntNode;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -15,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import frc.robot.autos.*;
-import frc.robot.autos.autoCommands.autoDock;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -91,8 +87,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        runIntake.whileTrue(new runIntake(s_Intake, this, s_RobotState));
-        otherIntake.whileTrue(new otherIntakerun(s_Intake, this, s_RobotState));
+        runIntake.whileTrue(new runIntake(s_Intake, this));
+        otherIntake.whileTrue(new otherIntakerun(s_Intake, this));
         setStow.onTrue(new Stow(s_Arm, s_Wrist));
         setL2.onTrue(new MiddleNode(s_Arm, s_Wrist));
         setL3.onTrue(new HighNode(s_Arm, s_Wrist));

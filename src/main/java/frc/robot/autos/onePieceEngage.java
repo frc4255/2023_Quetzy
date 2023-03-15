@@ -11,7 +11,6 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -28,7 +27,7 @@ public class onePieceEngage extends SequentialCommandGroup {
             new InstantCommand(() -> s_Swerve.resetOdometry(path), s_Swerve),
             new WaitCommand(0.1),
             new HighNode(s_Arm, s_Wrist),
-            new runIntake(s_Intake, m_RobotContainer, s_RobotState).repeatedly().withTimeout(0.1),
+            new runIntake(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.1),
             new Stow(s_Arm, s_Wrist),
             outAndIn,
             new autoDock(s_Swerve, s_RobotState)
