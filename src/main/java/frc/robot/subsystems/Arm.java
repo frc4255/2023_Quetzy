@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import frc.robot.subsystems.RobotState.robotStates;
 
 public class Arm extends ProfiledPIDSubsystem {
 
@@ -77,14 +76,14 @@ public class Arm extends ProfiledPIDSubsystem {
 
   private void moveToPos(armPositions pos) {
 
-    if (s_RobotState.getCurrentState() == robotStates.CUBE) {
+    if (s_RobotState.getCurrentState() == RobotState.State.CUBE) {
       goal = cubeGoals;
     } else {
       goal = coneGoals;
     }
 
     if (!encoder.isConnected()) {
-      s_RobotState.toggleState(401);
+      s_RobotState.setState(RobotState.State.ENCODER_DISCONNECTED);;
       return;
     }
 

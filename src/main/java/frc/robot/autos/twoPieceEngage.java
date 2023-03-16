@@ -38,7 +38,7 @@ public class twoPieceEngage extends SequentialCommandGroup {
             new HighNode(s_Arm, s_Wrist),
             new runIntake(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.1),
             new ParallelCommandGroup(
-                new InstantCommand(() -> s_RobotState.toggleState(101)),
+                new InstantCommand(() -> s_RobotState.setState(RobotState.State.CUBE)),
                 grab1Cone,
                 new SequentialCommandGroup(
                     new Stow(s_Arm, s_Wrist),
