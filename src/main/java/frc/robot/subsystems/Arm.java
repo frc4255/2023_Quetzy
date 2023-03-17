@@ -169,6 +169,7 @@ public class Arm extends ProfiledPIDSubsystem {
     super.periodic();
 
     SmartDashboard.putNumber("Arm angle", encoder.getDistance());
+    SmartDashboard.putNumber("Arm error", getController().getPositionError());
   }
 
   @Override
