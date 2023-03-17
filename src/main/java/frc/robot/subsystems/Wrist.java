@@ -5,7 +5,6 @@ import java.util.HashMap;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.RobotState.robotStates;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
@@ -15,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 
 public class Wrist extends ProfiledPIDSubsystem {
@@ -77,14 +77,14 @@ public class Wrist extends ProfiledPIDSubsystem {
 
   private void moveToPos(wristPositions pos) {
 
-    if (s_RobotState.getCurrentState() == robotStates.CUBE) {
+    if (s_RobotState.getCurrentState() == RobotState.State.CUBE) {
       goal = cubeGoals;
     } else {
       goal = coneGoals;
     }
 
     if (!encoder.isConnected()) {
-      s_RobotState.toggleState(401);
+      s_RobotState.setState(RobotState.State.ENCODER_DISCONNECTED);;
       return;
     }
 

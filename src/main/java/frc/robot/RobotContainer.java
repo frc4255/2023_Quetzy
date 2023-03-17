@@ -94,8 +94,8 @@ public class RobotContainer {
         setL3.onTrue(new HighNode(s_Arm, s_Wrist));
         setL1.onTrue(new BottomNode(s_Arm, s_Wrist));
         setShelf.onTrue(new Shelf(s_Arm, s_Wrist));
-        coneState.onTrue(new InstantCommand(() -> s_RobotState.toggleState(102)));
-        cubeState.onTrue(new InstantCommand(() -> s_RobotState.toggleState(101)));
+        coneState.onTrue(new InstantCommand(() -> s_RobotState.setState(RobotState.State.CONE)));
+        cubeState.onTrue(new InstantCommand(() -> s_RobotState.setState(RobotState.State.CUBE)));
 
     }
 
@@ -113,7 +113,7 @@ public class RobotContainer {
     }
 
     public void ConeState() {
-        s_RobotState.toggleState(102);
+        s_RobotState.setState(RobotState.State.CONE);
     }
 
     public Joystick getController() {

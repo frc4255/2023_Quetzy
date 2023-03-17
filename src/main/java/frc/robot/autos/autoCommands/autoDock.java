@@ -27,7 +27,7 @@ public class autoDock extends CommandBase{
 // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    s_RobotState.toggleState(201);
+    s_RobotState.setState(RobotState.State.NOT_BALANCED);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,7 +36,7 @@ public class autoDock extends CommandBase{
     tilt = new Translation2d(rollPID.calculate(m_Swerve.getPitch() * -1, 0), pitchPID.calculate(m_Swerve.getRoll(), 0));
 
     if (Math.abs(m_Swerve.getRoll()) < 2.5 && Math.abs(m_Swerve.getPitch()) < 2.5) {
-      s_RobotState.toggleState(202);
+      s_RobotState.setState(RobotState.State.BALANCED);
     }
 
     m_Swerve.drive(tilt, 0, false, true);
