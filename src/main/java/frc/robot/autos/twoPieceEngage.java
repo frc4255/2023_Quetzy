@@ -2,6 +2,7 @@ package frc.robot.autos;
 
 import frc.robot.RobotContainer;
 import frc.robot.autos.autoCommands.autoDock;
+import frc.robot.autos.autoCommands.avoidChargeStation;
 import frc.robot.commands.BottomNode;
 import frc.robot.commands.HighNode;
 import frc.robot.commands.Stow;
@@ -41,16 +42,16 @@ public class twoPieceEngage extends SequentialCommandGroup {
                 new InstantCommand(() -> s_RobotState.setState(RobotState.State.CUBE)),
                 grab1Cone,
                 new SequentialCommandGroup(
-                    new Stow(s_Arm, s_Wrist),
+                    new avoidChargeStation(s_Arm, s_Wrist),
                     new BottomNode(s_Arm, s_Wrist),
-                    new runIntake(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.7)
+                    new runIntake(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.5)
               )
             ),
             new ParallelCommandGroup(
                 alignToCube,
                 new SequentialCommandGroup(
                     new Stow(s_Arm, s_Wrist),
-                    new WaitCommand(0.5),
+                    new WaitCommand(0.25),
                     new HighNode(s_Arm, s_Wrist)
                 )
             ),

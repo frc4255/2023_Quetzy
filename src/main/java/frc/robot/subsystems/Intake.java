@@ -16,11 +16,11 @@ public class Intake extends SubsystemBase {
     }
 
     public void intakeObject() {
-        motor.set(ControlMode.PercentOutput, 0.35);
+        motor.set(ControlMode.PercentOutput, 0.7);
     }
 
     public void extakeObject() {
-        motor.set(ControlMode.PercentOutput, -0.35);
+        motor.set(ControlMode.PercentOutput, -0.7);
     }
 
     public void sendIt() {

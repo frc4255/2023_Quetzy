@@ -12,8 +12,8 @@ public class autoDock extends CommandBase{
     private final Swerve m_Swerve;
     private final RobotState s_RobotState;
     private Translation2d tilt;
-    private PIDController rollPID = new PIDController(0.035, 0, 0.0001);
-    private PIDController pitchPID = new PIDController(0.035, 0, 0.0001);
+    private PIDController rollPID = new PIDController(0.05, 0, 0.0001);
+    private PIDController pitchPID = new PIDController(0.05, 0, 0.0001);
 
     public autoDock(Swerve m_Swerve, RobotState s_RobotState) {
         this.m_Swerve = m_Swerve;

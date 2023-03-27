@@ -31,6 +31,10 @@ public class MidWrist extends CommandBase{
   // Returns true when the command should end.
   @Override
     public boolean isFinished() {
+      if (m_Wrist.isNearGoal("mid")) {
+        return true;
+      } else {
         return false;
+      }
     }
 }

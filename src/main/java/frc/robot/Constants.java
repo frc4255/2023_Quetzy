@@ -26,7 +26,7 @@ public final class Constants {
 
         //Trapezodial Profile Constants
         public static final double kMaxVelocityRads = 3.5;
-        public static final double kMaxAccelerationRads = 4;
+        public static final double kMaxAccelerationRads = 4.25;
     }
 
     public static final class Wrist {
@@ -42,7 +42,7 @@ public final class Constants {
 
          //Trapezodial Profile Constants
         public static final double kMaxVelocityRads = 3;
-        public static final double kMaxAccelerationRads = 3.5;
+        public static final double kMaxAccelerationRads = 3.75;
  
     }
 
