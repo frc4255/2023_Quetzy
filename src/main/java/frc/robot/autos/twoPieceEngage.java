@@ -25,11 +25,9 @@ public class twoPieceEngage extends SequentialCommandGroup {
     public twoPieceEngage(Swerve s_Swerve, Intake s_Intake, Arm s_Arm, Wrist s_Wrist, RobotContainer m_RobotContainer, RobotState s_RobotState){
 
         PathPlannerTrajectory path1 = PathPlanner.loadPath("2PE-1", new PathConstraints(4, 3));
-        PathPlannerTrajectory path2 = PathPlanner.loadPath("2PE-2", new PathConstraints(4, 3));
         PathPlannerTrajectory path3 = PathPlanner.loadPath("2PE-3", new PathConstraints(3, 2));
 
-        PPSwerveControllerCommand grab1Cone = s_Swerve.followTrajectoryCommand(path1);
-        PPSwerveControllerCommand alignToCube = s_Swerve.followTrajectoryCommand(path2);
+        PPSwerveControllerCommand swoopAndScoop = s_Swerve.followTrajectoryCommand(path1);
         PPSwerveControllerCommand goToChargeStation = s_Swerve.followTrajectoryCommand(path3);
 
         addCommands(
@@ -40,18 +38,13 @@ public class twoPieceEngage extends SequentialCommandGroup {
             new runIntake(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.1),
             new ParallelCommandGroup(
                 new InstantCommand(() -> s_RobotState.setState(RobotState.State.CUBE)),
-                grab1Cone,
-                new SequentialCommandGroup(
-                    new avoidChargeStation(s_Arm, s_Wrist),
-                    new BottomNode(s_Arm, s_Wrist),
-                    new runIntake(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.5)
-              )
-            ),
-            new ParallelCommandGroup(
-                alignToCube,
+                swoopAndScoop,
                 new SequentialCommandGroup(
                     new Stow(s_Arm, s_Wrist),
-                    new WaitCommand(0.25),
+                    new BottomNode(s_Arm, s_Wrist),
+                    new runIntake(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.75),
+                    new Stow(s_Arm, s_Wrist),
+                    new WaitCommand(0.5),
                     new HighNode(s_Arm, s_Wrist)
                 )
             ),

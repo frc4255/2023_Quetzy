@@ -59,10 +59,10 @@ public class Wrist extends ProfiledPIDSubsystem {
 
    //TODO: Set wrist cone goals
    coneGoals.put(wristPositions.STOW, 4.38);
-   coneGoals.put(wristPositions.LOW, 3.167);
+   coneGoals.put(wristPositions.LOW, 3.177);
    coneGoals.put(wristPositions.MID, 4.05);
    coneGoals.put(wristPositions.HIGH, 3.45);
-   coneGoals.put(wristPositions.SHELF, 3.3);
+   coneGoals.put(wristPositions.SHELF, 3.25);
 
     encoder = new DutyCycleEncoder(0);
     encoder.setDistancePerRotation(2 * Math.PI);
