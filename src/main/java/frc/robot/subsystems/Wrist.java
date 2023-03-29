@@ -62,11 +62,11 @@ public class Wrist extends ProfiledPIDSubsystem {
    coneGoals.put(wristPositions.LOW, 3.184);
    coneGoals.put(wristPositions.MID, 4.05);
    coneGoals.put(wristPositions.HIGH, 3.47);
-   coneGoals.put(wristPositions.SHELF, 3.31);
+   coneGoals.put(wristPositions.SHELF, 3.3);
 
     encoder = new DutyCycleEncoder(0);
     encoder.setDistancePerRotation(2 * Math.PI);
-    encoder.setPositionOffset(0.1);
+    encoder.setPositionOffset(0.875);
 
     m_feedforward = new ArmFeedforward(Constants.Wrist.kS, Constants.Wrist.kG, Constants.Wrist.kV);
 
@@ -161,6 +161,7 @@ public class Wrist extends ProfiledPIDSubsystem {
     super.periodic();
 
     SmartDashboard.putNumber("Wrist angle", getMeasurement());
+    SmartDashboard.putNumber("Wrist absolute position", encoder.getAbsolutePosition());
   }
 
   @Override
@@ -171,7 +172,7 @@ public class Wrist extends ProfiledPIDSubsystem {
 
   @Override
   protected double getMeasurement() {
-    return encoder.getDistance() * -1 + 2 * Math.PI;
+    return encoder.getDistance() * (-1);
   }
 
   @Override
