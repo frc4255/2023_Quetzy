@@ -11,7 +11,7 @@ public class RobotState {
         CUBE(0.91, 0.91),
         CONE(0.69, 0.69),
         HAS_OBJECT(-0.91, -0.91),
-        NOT_BALANCED(-0.21, -0.21),
+        NOT_BALANCED(-0.91, -0.91),
         BALANCED(0.93, 0.93),
         ENCODER_DISCONNECTED(-0.11, -0.11),
         CAN_BUS_ERROR(-0.09, -0.09),

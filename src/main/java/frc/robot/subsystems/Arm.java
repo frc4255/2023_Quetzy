@@ -57,7 +57,7 @@ public class Arm extends ProfiledPIDSubsystem {
     cubeGoals.put(armPositions.STOW, 1.6);
     cubeGoals.put(armPositions.LOW, 1.68);
     cubeGoals.put(armPositions.MID, 2.4);
-    cubeGoals.put(armPositions.HIGH, 3.1);
+    cubeGoals.put(armPositions.HIGH, 3.12);
     cubeGoals.put(armPositions.SHELF, 3.4)
     ;
     encoder = new DutyCycleEncoder(1);

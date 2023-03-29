@@ -42,7 +42,7 @@ public class twoPieceEngage extends SequentialCommandGroup {
                 new SequentialCommandGroup(
                     new Stow(s_Arm, s_Wrist),
                     new BottomNode(s_Arm, s_Wrist),
-                    new runIntake(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.75),
+                    new runIntake(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.95),
                     new Stow(s_Arm, s_Wrist),
                     new WaitCommand(0.5),
                     new HighNode(s_Arm, s_Wrist)
