@@ -51,7 +51,7 @@ public class RobotContainer {
     private final Swerve s_Swerve = new Swerve(this);
     private final Arm s_Arm = new Arm(s_RobotState);
     private final Wrist s_Wrist = new Wrist(s_RobotState);
-    private final Intake s_Intake = new Intake();
+    private final Intake s_Intake = new Intake(s_RobotState);
 
     public SendableChooser<Command> autoChooser;
 

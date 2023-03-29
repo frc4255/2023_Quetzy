@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.RobotState.State;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -9,10 +10,13 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 public class Intake extends SubsystemBase {
     private TalonFX motor;
+    private RobotState s_RobotState;
     
-    public Intake() {
+    public Intake(RobotState s_RobotState) {
         motor = new TalonFX(30);
         motor.setNeutralMode(NeutralMode.Brake);
+
+        this.s_RobotState = s_RobotState;
     }
 
     public void intakeObject() {
@@ -28,7 +32,13 @@ public class Intake extends SubsystemBase {
     }
 
     public void stop() {
-        motor.set(ControlMode.PercentOutput, 0.0);
+        if (s_RobotState.getCurrentState() == State.CONE) {
+            motor.set(ControlMode.PercentOutput, -0.07);
+        } else if (s_RobotState.getCurrentState() == State.CUBE) {
+            motor.set(ControlMode.PercentOutput, 0.07);
+        } else {
+            motor.set(ControlMode.PercentOutput, 0.0);
+        }
     }
 
     public boolean hasObject() {
