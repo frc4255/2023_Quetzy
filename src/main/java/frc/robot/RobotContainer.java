@@ -1,9 +1,12 @@
 package frc.robot;
 
+import com.ctre.phoenix.led.SingleFadeAnimation;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.simulation.XboxControllerSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -41,6 +44,7 @@ public class RobotContainer {
     private final JoystickButton coneState = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton cubeState = new JoystickButton(driver, XboxController.Button.kX.value);
     private final JoystickButton setL2 = new JoystickButton(driver, XboxController.Button.kB.value);
+    private final JoystickButton setSingle = new JoystickButton(driver, XboxController.Button.kA.value);
     private final POVButton setStow = new POVButton(driver, 180);
     private final POVButton setL3 = new POVButton(driver, 270);
     private final POVButton setL1 = new POVButton(driver, 0);
@@ -96,7 +100,7 @@ public class RobotContainer {
         setShelf.onTrue(new Shelf(s_Arm, s_Wrist));
         coneState.onTrue(new InstantCommand(() -> s_RobotState.setState(RobotState.State.CONE)));
         cubeState.onTrue(new InstantCommand(() -> s_RobotState.setState(RobotState.State.CUBE)));
-
+        setSingle.onTrue(new Single(s_Arm, s_Wrist));
     }
 
     private void configAutoChooser() {

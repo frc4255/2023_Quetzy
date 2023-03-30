@@ -30,7 +30,8 @@ public class Arm extends ProfiledPIDSubsystem {
     LOW,
     MID,
     HIGH,
-    SHELF
+    SHELF,
+    SINGLE
   }
 
   private final HashMap<armPositions, Double> coneGoals = new HashMap<>();
@@ -52,13 +53,15 @@ public class Arm extends ProfiledPIDSubsystem {
     coneGoals.put(armPositions.MID, 2.2);
     coneGoals.put(armPositions.HIGH, 3.4);
     coneGoals.put(armPositions.SHELF, 3.45);
+    coneGoals.put(armPositions.SINGLE, 2.2);
 
     //TODO: Set arm cube goals
     cubeGoals.put(armPositions.STOW, 1.6);
     cubeGoals.put(armPositions.LOW, 1.68);
     cubeGoals.put(armPositions.MID, 2.4);
     cubeGoals.put(armPositions.HIGH, 3.12);
-    cubeGoals.put(armPositions.SHELF, 3.4)
+    cubeGoals.put(armPositions.SHELF, 3.4);
+    cubeGoals.put(armPositions.SINGLE, 2.4);
     ;
     encoder = new DutyCycleEncoder(1);
     encoder.setDistancePerRotation(2 * Math.PI);
@@ -103,6 +106,9 @@ public class Arm extends ProfiledPIDSubsystem {
         case STOW:
           setGoal(goal.get(armPositions.STOW));
           break;
+        case SINGLE:
+          setGoal(goal.get(armPositions.SINGLE));
+          break;
       }
 
   }
@@ -127,6 +133,8 @@ public class Arm extends ProfiledPIDSubsystem {
       case "stow":
         goalPos = goal.get(armPositions.STOW);
         break;
+      case "single":
+        goalPos = goal.get(armPositions.SINGLE);
     }
 
     if (Math.abs(encoder.getDistance() - goalPos) < 0.04 || encoder.getDistance() == goalPos) {
@@ -154,6 +162,10 @@ public class Arm extends ProfiledPIDSubsystem {
 
   public void stow() {
     moveToPos(armPositions.STOW);
+  }
+
+  public void setSingle() {
+    moveToPos(armPositions.SINGLE);
   }
 
   @Override
