@@ -26,6 +26,10 @@ public class Wrist extends ProfiledPIDSubsystem {
 
   private RobotState s_RobotState;
 
+  private double lastValue = 0.0;
+  private boolean safety = false;
+  private boolean encoderDisconnected = false;
+
   private enum wristPositions {
     STOW,
     LOW,
@@ -57,19 +61,19 @@ public class Wrist extends ProfiledPIDSubsystem {
    cubeGoals.put(wristPositions.MID, 3.95);
    cubeGoals.put(wristPositions.HIGH, 3.8);
    cubeGoals.put(wristPositions.SHELF, 3.2);
-   cubeGoals.put(wristPositions.SINGLE, 3.95);
+   cubeGoals.put(wristPositions.SINGLE, 4.38);
 
    //TODO: Set wrist cone goals
    coneGoals.put(wristPositions.STOW, 4.38);
    coneGoals.put(wristPositions.LOW, 3.184);
    coneGoals.put(wristPositions.MID, 4.05);
    coneGoals.put(wristPositions.HIGH, 3.47);
-   coneGoals.put(wristPositions.SHELF, 3.3);
-   coneGoals.put(wristPositions.SINGLE, 4.05);
+   coneGoals.put(wristPositions.SHELF, 3.345);
+   coneGoals.put(wristPositions.SINGLE, 4.38);
 
     encoder = new DutyCycleEncoder(0);
     encoder.setDistancePerRotation(2 * Math.PI);
-    encoder.setPositionOffset(0.1);
+    encoder.setPositionOffset(0.854);
 
     m_feedforward = new ArmFeedforward(Constants.Wrist.kS, Constants.Wrist.kG, Constants.Wrist.kV);
 
@@ -86,8 +90,7 @@ public class Wrist extends ProfiledPIDSubsystem {
       goal = coneGoals;
     }
 
-    if (!encoder.isConnected()) {
-      s_RobotState.setState(RobotState.State.ENCODER_DISCONNECTED);;
+    if (runSafetyChecks()) {
       return;
     }
 
@@ -172,7 +175,21 @@ public class Wrist extends ProfiledPIDSubsystem {
   public void periodic() {
     super.periodic();
 
+
+    if (passedZero()) {
+      safety = true;
+      motor.stopMotor();
+      System.out.println("FATAL ERROR: WRIST HAS PASSED ENCODER ZERO");
+    }
+
+    if (checkEncoderConnection()) {
+      encoderDisconnected = true;
+      motor.stopMotor();
+      System.out.println("FATAL ERROR: WRIST HAS LOST ENCODER CONNECTION");
+    }
+
     SmartDashboard.putNumber("Wrist angle", getMeasurement());
+    SmartDashboard.putNumber("Wrist absolute position", encoder.getAbsolutePosition());
   }
 
   @Override
@@ -183,10 +200,39 @@ public class Wrist extends ProfiledPIDSubsystem {
 
   @Override
   protected double getMeasurement() {
-    return encoder.getDistance() * -1 + 2 * Math.PI;
+    return encoder.getDistance() * (-1);
   }
 
   @Override
   public void simulationPeriodic() {
+  }
+
+  private boolean passedZero() {
+    if (Math.abs(encoder.getAbsolutePosition() - lastValue) > 0.9) {
+      if (encoder.getAbsolutePosition() < 0.1) {
+        
+      }
+      lastValue = encoder.getAbsolutePosition();
+      return true;
+    } else {
+      lastValue = encoder.getAbsolutePosition();
+      return false;
+    }
+  }
+
+  private boolean checkEncoderConnection() {
+    if (!encoder.isConnected()) {
+      s_RobotState.setState(RobotState.State.ENCODER_DISCONNECTED);
+      return true;
+    }
+    return false;
+  }
+
+  private boolean runSafetyChecks() {
+    if (safety || encoderDisconnected) {
+      return true;
+    }
+
+    return false;
   }
 }
