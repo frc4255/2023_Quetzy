@@ -55,24 +55,24 @@ public class Arm extends ProfiledPIDSubsystem {
     this.s_RobotState = s_RobotState;
 
     // TODO: Set arm cone goals
-    coneGoals.put(armPositions.STOW, 1.6);
-    coneGoals.put(armPositions.LOW, 1.68);
-    coneGoals.put(armPositions.MID, 2.2);
-    coneGoals.put(armPositions.HIGH, 3.4);
-    coneGoals.put(armPositions.SHELF, 3.45);
-    coneGoals.put(armPositions.SINGLE, 2.2);
+    coneGoals.put(armPositions.STOW, 1.67);
+    coneGoals.put(armPositions.LOW, 1.75);
+    coneGoals.put(armPositions.MID, 2.27);
+    coneGoals.put(armPositions.HIGH, 3.49);
+    coneGoals.put(armPositions.SHELF, 3.52);
+    coneGoals.put(armPositions.SINGLE, 2.27);
 
     // TODO: Set arm cube goals
-    cubeGoals.put(armPositions.STOW, 1.6);
-    cubeGoals.put(armPositions.LOW, 1.68);
-    cubeGoals.put(armPositions.MID, 2.4);
-    cubeGoals.put(armPositions.HIGH, 3.12);
-    cubeGoals.put(armPositions.SHELF, 3.4);
-    cubeGoals.put(armPositions.SINGLE, 2.4);
+    cubeGoals.put(armPositions.STOW, 1.67);
+    cubeGoals.put(armPositions.LOW, 1.75);
+    cubeGoals.put(armPositions.MID, 2.47);
+    cubeGoals.put(armPositions.HIGH, 3.19);
+    cubeGoals.put(armPositions.SHELF, 3.47);
+    cubeGoals.put(armPositions.SINGLE, 2.47);
     ;
     encoder = new DutyCycleEncoder(1);
     encoder.setDistancePerRotation(2 * Math.PI);
-    encoder.setPositionOffset(0.5);
+    encoder.setPositionOffset(0.0);
 
     m_feedforward = new ArmFeedforward(Constants.Arm.kS, Constants.Arm.kG, Constants.Arm.kV);
 
@@ -198,7 +198,7 @@ public class Arm extends ProfiledPIDSubsystem {
       System.out.println("FATAL ERROR: ARM HAS LOST ENCODER CONNECTION");
     }
 
-    SmartDashboard.putNumber("Arm angle", encoder.getDistance());
+    SmartDashboard.putNumber("Arm angle", getMeasurement());
     SmartDashboard.putNumber("Arm error", getController().getPositionError());
     SmartDashboard.putNumber("Arm Absolute Position", encoder.getAbsolutePosition());
   }
