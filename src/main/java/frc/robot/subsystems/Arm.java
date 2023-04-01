@@ -3,9 +3,12 @@ package frc.robot.subsystems;
 import java.util.HashMap;
 import java.lang.Math;
 
+
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 
 import frc.robot.Constants;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -24,6 +27,10 @@ public class Arm extends ProfiledPIDSubsystem {
   private ArmFeedforward m_feedforward;
 
   private RobotState s_RobotState;
+
+  private double lastValue = 0.0;
+  private boolean safety = false;
+  private boolean encoderDisconnected = false;
 
   private enum armPositions {
     STOW,
@@ -47,25 +54,25 @@ public class Arm extends ProfiledPIDSubsystem {
 
     this.s_RobotState = s_RobotState;
 
-    //TODO: Set arm cone goals
+    // TODO: Set arm cone goals
     coneGoals.put(armPositions.STOW, 1.6);
     coneGoals.put(armPositions.LOW, 1.68);
     coneGoals.put(armPositions.MID, 2.2);
     coneGoals.put(armPositions.HIGH, 3.4);
     coneGoals.put(armPositions.SHELF, 3.45);
-    coneGoals.put(armPositions.SINGLE, 2.1);
+    coneGoals.put(armPositions.SINGLE, 2.2);
 
-    //TODO: Set arm cube goals
+    // TODO: Set arm cube goals
     cubeGoals.put(armPositions.STOW, 1.6);
     cubeGoals.put(armPositions.LOW, 1.68);
     cubeGoals.put(armPositions.MID, 2.4);
     cubeGoals.put(armPositions.HIGH, 3.12);
     cubeGoals.put(armPositions.SHELF, 3.4);
-    cubeGoals.put(armPositions.SINGLE, 2.1);
+    cubeGoals.put(armPositions.SINGLE, 2.4);
     ;
     encoder = new DutyCycleEncoder(1);
     encoder.setDistancePerRotation(2 * Math.PI);
-    encoder.setPositionOffset(0.425);
+    encoder.setPositionOffset(0.5);
 
     m_feedforward = new ArmFeedforward(Constants.Arm.kS, Constants.Arm.kG, Constants.Arm.kV);
 
@@ -85,32 +92,30 @@ public class Arm extends ProfiledPIDSubsystem {
       goal = coneGoals;
     }
 
-    if (!encoder.isConnected()) {
-      s_RobotState.setState(RobotState.State.ENCODER_DISCONNECTED);;
+    if (runSafetyChecks()) {
       return;
     }
 
-      switch (pos) {
-        case LOW:
-          setGoal(goal.get(armPositions.LOW));
-          break;
-        case MID:
-          setGoal(goal.get(armPositions.MID));
-          break;
-        case HIGH:
-          setGoal(goal.get(armPositions.HIGH));
-          break;
-        case SHELF:
-          setGoal(goal.get(armPositions.SHELF));
-          break;
-        case STOW:
-          setGoal(goal.get(armPositions.STOW));
-          break;
-        case SINGLE:
-          setGoal(goal.get(armPositions.SINGLE));
-          break;
-      }
-
+    switch (pos) {
+      case LOW:
+        setGoal(goal.get(armPositions.LOW));
+        break;
+      case MID:
+        setGoal(goal.get(armPositions.MID));
+        break;
+      case HIGH:
+        setGoal(goal.get(armPositions.HIGH));
+        break;
+      case SHELF:
+        setGoal(goal.get(armPositions.SHELF));
+        break;
+      case STOW:
+        setGoal(goal.get(armPositions.STOW));
+        break;
+      case SINGLE:
+        setGoal(goal.get(armPositions.SINGLE));
+        break;
+    }
   }
 
   public boolean isNearGoal(String whatgoal) {
@@ -179,6 +184,20 @@ public class Arm extends ProfiledPIDSubsystem {
   public void periodic() {
     super.periodic();
 
+    if (passedZero()) {
+      safety = true;
+      motor1.stopMotor();
+      motor2.stopMotor();
+      System.out.println("FATAL ERROR: ARM HAS PASSED ENCODER ZERO");
+    }
+
+    if (checkEncoderConnection()) {
+      encoderDisconnected = true;
+      motor1.stopMotor();
+      motor2.stopMotor();
+      System.out.println("FATAL ERROR: ARM HAS LOST ENCODER CONNECTION");
+    }
+
     SmartDashboard.putNumber("Arm angle", encoder.getDistance());
     SmartDashboard.putNumber("Arm error", getController().getPositionError());
     SmartDashboard.putNumber("Arm Absolute Position", encoder.getAbsolutePosition());
@@ -187,5 +206,34 @@ public class Arm extends ProfiledPIDSubsystem {
   @Override
   public double getMeasurement() {
     return encoder.getDistance();
+  }
+
+  private boolean passedZero() {
+    if (Math.abs(encoder.getAbsolutePosition() - lastValue) > 0.9) {
+      if (encoder.getAbsolutePosition() < 0.1) {
+
+      }
+      lastValue = encoder.getAbsolutePosition();
+      return true;
+    } else {
+      lastValue = encoder.getAbsolutePosition();
+      return false;
+    }
+  }
+
+  private boolean checkEncoderConnection() {
+    if (!encoder.isConnected()) {
+      s_RobotState.setState(RobotState.State.ENCODER_DISCONNECTED);
+      return true;
+    }
+    return false;
+  }
+
+  private boolean runSafetyChecks() {
+    if (safety || encoderDisconnected) {
+      return true;
+    }
+
+    return false;
   }
 }
