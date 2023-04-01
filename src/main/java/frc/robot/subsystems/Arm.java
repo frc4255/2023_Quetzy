@@ -28,7 +28,9 @@ public class Arm extends ProfiledPIDSubsystem {
 
   private RobotState s_RobotState;
 
-  private double lastValue = 0.0;
+  private double lastAbsoluteValue = 0.0;
+  private double lastValueRadians = 0.0;
+  private double incrementEncoderZero = 0.0;
   private boolean safety = false;
   private boolean encoderDisconnected = false;
 
@@ -191,10 +193,11 @@ public class Arm extends ProfiledPIDSubsystem {
       System.out.println("FATAL ERROR: ARM HAS PASSED ENCODER ZERO");
     }
 
+    lastValueRadians = getMeasurement();
+    lastAbsoluteValue = encoder.getAbsolutePosition();
+
     if (checkEncoderConnection()) {
       encoderDisconnected = true;
-      motor1.stopMotor();
-      motor2.stopMotor();
       System.out.println("FATAL ERROR: ARM HAS LOST ENCODER CONNECTION");
     }
 
@@ -205,18 +208,18 @@ public class Arm extends ProfiledPIDSubsystem {
 
   @Override
   public double getMeasurement() {
-    return encoder.getDistance();
+    return encoder.getDistance() + incrementEncoderZero;
   }
 
   private boolean passedZero() {
-    if (Math.abs(encoder.getAbsolutePosition() - lastValue) > 0.9) {
+    if (Math.abs(encoder.getAbsolutePosition() - lastAbsoluteValue) > 0.9) {
       if (encoder.getAbsolutePosition() < 0.1) {
-
+        incrementEncoderZero = lastValueRadians;
+      } else if (encoder.getAbsolutePosition() > 0.9) {
+        incrementEncoderZero = -lastValueRadians;
       }
-      lastValue = encoder.getAbsolutePosition();
       return true;
     } else {
-      lastValue = encoder.getAbsolutePosition();
       return false;
     }
   }
