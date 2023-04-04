@@ -5,7 +5,6 @@ import frc.robot.autos.autoCommands.autoDock;
 import frc.robot.commands.HighNode;
 import frc.robot.commands.Stow;
 import frc.robot.commands.otherIntakerun;
-import frc.robot.commands.runIntake;
 import frc.robot.subsystems.*;
 
 import com.pathplanner.lib.PathPlanner;

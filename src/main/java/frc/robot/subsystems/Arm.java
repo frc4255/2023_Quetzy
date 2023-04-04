@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 
 import frc.robot.Constants;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -28,7 +27,6 @@ public class Arm extends ProfiledPIDSubsystem {
 
   private RobotState s_RobotState;
 
-  private double lastAbsoluteValue = 0.0;
   private double lastValueRadians = 0.0;
   private double incrementEncoderZero = 0.0;
   private boolean safety = false;
@@ -189,7 +187,6 @@ public class Arm extends ProfiledPIDSubsystem {
     checkForRollover();
 
     lastValueRadians = getMeasurement();
-    lastAbsoluteValue = encoder.getAbsolutePosition();
 
     if (checkEncoderConnection()) {
       encoderDisconnected = true;

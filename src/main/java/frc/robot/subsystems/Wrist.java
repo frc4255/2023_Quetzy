@@ -26,7 +26,6 @@ public class Wrist extends ProfiledPIDSubsystem {
 
   private RobotState s_RobotState;
 
-  private double lastAbsoluteValue = 0.0;
   private double lastValueRadians = 0.0;
   private double incrementEncoderZero = 0.0;
 
@@ -181,7 +180,6 @@ public class Wrist extends ProfiledPIDSubsystem {
     checkForRollover();
 
     lastValueRadians = getMeasurement();
-    lastAbsoluteValue = encoder.getAbsolutePosition();
 
     if (checkEncoderConnection()) {
       encoderDisconnected = true;

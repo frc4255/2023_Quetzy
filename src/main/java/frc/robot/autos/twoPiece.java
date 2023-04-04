@@ -1,8 +1,6 @@
 package frc.robot.autos;
 
 import frc.robot.RobotContainer;
-import frc.robot.autos.autoCommands.autoDock;
-import frc.robot.autos.autoCommands.avoidChargeStation;
 import frc.robot.commands.BottomNode;
 import frc.robot.commands.HighNode;
 import frc.robot.commands.Stow;
