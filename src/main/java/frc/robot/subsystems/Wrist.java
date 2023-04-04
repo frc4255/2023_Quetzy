@@ -178,10 +178,7 @@ public class Wrist extends ProfiledPIDSubsystem {
   public void periodic() {
     super.periodic();
 
-    if (passedZero()) {
-      safety = true;
-      System.out.println("FATAL ERROR: WRIST HAS PASSED ENCODER ZERO");
-    }
+    checkForRollover();
 
     lastValueRadians = getMeasurement();
     lastAbsoluteValue = encoder.getAbsolutePosition();
@@ -211,16 +208,13 @@ public class Wrist extends ProfiledPIDSubsystem {
   public void simulationPeriodic() {
   }
 
-  private boolean passedZero() {
-    if (Math.abs(encoder.getAbsolutePosition() - lastAbsoluteValue) > 0.9) {
-      if (encoder.getAbsolutePosition() < 0.1) {
-        incrementEncoderZero = lastValueRadians;
-      } else if (encoder.getAbsolutePosition() > 0.9) {
-        incrementEncoderZero = -lastValueRadians;
-      }
-      return true;
-    } else {
-      return false;
+  private void checkForRollover() {
+    double delta = getMeasurement() - lastValueRadians;
+
+    if (delta > 0.9 * (2 * Math.PI)) {
+      incrementEncoderZero += (2 * Math.PI);
+    } else if (delta < -0.9 * (2 * Math.PI)) {
+      incrementEncoderZero -= (2 * Math.PI);
     }
   }
 
