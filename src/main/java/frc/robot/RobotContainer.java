@@ -108,6 +108,7 @@ public class RobotContainer {
         autoChooser.setDefaultOption("2PE", new twoPieceEngage(s_Swerve, s_Intake, s_Arm, s_Wrist, this, s_RobotState));
         autoChooser.addOption("1PE", new onePieceEngage(s_Swerve, s_Intake, s_Arm, s_Wrist, this, s_RobotState));
         autoChooser.addOption("2P", new twoPiece(s_Swerve, s_Intake, s_Arm, s_Wrist, this, s_RobotState));
+        autoChooser.addOption("3P", new threePiece(s_Swerve, s_Intake, s_Arm, s_Wrist, this, s_RobotState));
         autoChooser.addOption("Do Nothing", null);
 
         SmartDashboard.putData(autoChooser);

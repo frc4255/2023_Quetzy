@@ -71,7 +71,7 @@ public class Wrist extends ProfiledPIDSubsystem {
    coneGoals.put(wristPositions.LOW, 3.21);
    coneGoals.put(wristPositions.MID, 4.05);
    coneGoals.put(wristPositions.HIGH, 3.47);
-   coneGoals.put(wristPositions.SHELF, 3.38);
+   coneGoals.put(wristPositions.SHELF, 3.39);
    coneGoals.put(wristPositions.SINGLE, 4.38);
 
     encoder = new DutyCycleEncoder(0);

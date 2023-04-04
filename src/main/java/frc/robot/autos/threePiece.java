@@ -5,6 +5,7 @@ import frc.robot.autos.autoCommands.autoDock;
 import frc.robot.autos.autoCommands.avoidChargeStation;
 import frc.robot.commands.BottomNode;
 import frc.robot.commands.HighNode;
+import frc.robot.commands.MiddleNode;
 import frc.robot.commands.Stow;
 import frc.robot.commands.otherIntakerun;
 import frc.robot.commands.runIntake;
@@ -25,7 +26,7 @@ public class threePiece extends SequentialCommandGroup {
     public threePiece(Swerve s_Swerve, Intake s_Intake, Arm s_Arm, Wrist s_Wrist, RobotContainer m_RobotContainer, RobotState s_RobotState){
 
         PathPlannerTrajectory path1 = PathPlanner.loadPath("2PE-1", new PathConstraints(4, 3));
-        PathPlannerTrajectory path2 = PathPlanner.loadPath("3P", new PathConstraints(4, 4));
+        PathPlannerTrajectory path2 = PathPlanner.loadPath("3P", new PathConstraints(4, 3.5));
 
         PPSwerveControllerCommand swoopAndScoop = s_Swerve.followTrajectoryCommand(path1);
         PPSwerveControllerCommand swoopAndScoop2 = s_Swerve.followTrajectoryCommand(path2);
@@ -49,16 +50,15 @@ public class threePiece extends SequentialCommandGroup {
                 )
             ),
             new otherIntakerun(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.2),
-            new Stow(s_Arm, s_Wrist),
             new ParallelCommandGroup(
                 swoopAndScoop2,
                 new SequentialCommandGroup(
-                    new WaitCommand(0.5),
+                    new Stow(s_Arm, s_Wrist),
                     new BottomNode(s_Arm, s_Wrist),
                     new runIntake(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.95),
                     new Stow(s_Arm, s_Wrist),
-                    new WaitCommand(0.5),
-                    new HighNode(s_Arm, s_Wrist)
+                    new WaitCommand(0.2),
+                    new MiddleNode(s_Arm, s_Wrist)
                 )
             ),
             new otherIntakerun(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.2),
