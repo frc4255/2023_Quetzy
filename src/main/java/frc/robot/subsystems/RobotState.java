@@ -1,11 +1,17 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 public class RobotState {
-    
+
     private final Spark rightLEDs = new Spark(1);
     private final Spark leftLEDs = new Spark(0);
+
+    private DataLog log;
+    private StringLogEntry stateLog;
 
     public enum State {
         CUBE(0.91, 0.91),
@@ -34,13 +40,18 @@ public class RobotState {
             return leftValue;
         }
     }
-    
+
     private State currentState = State.IDLE;
     private State lastState = State.IDLE;
 
     public RobotState() {
         rightLEDs.set(-0.99);
         leftLEDs.set(-0.99);
+
+        /* Telemetry */
+        log = DataLogManager.getLog();
+
+        stateLog = new StringLogEntry(log, "/state");
     }
 
     public void setState(State desiredState) {
@@ -51,6 +62,8 @@ public class RobotState {
         currentState = desiredState;
         rightLEDs.set(currentState.getRightLEDValue());
         leftLEDs.set(currentState.getLeftLEDValue());
+        
+        stateLog.append(currentState.toString());
     }
 
     public State getCurrentState() {
