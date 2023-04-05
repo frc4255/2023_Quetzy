@@ -55,24 +55,24 @@ public class Arm extends ProfiledPIDSubsystem {
     this.s_RobotState = s_RobotState;
 
     // TODO: Set arm cone goals
-    coneGoals.put(armPositions.STOW, 1.67);
-    coneGoals.put(armPositions.LOW, 1.75);
-    coneGoals.put(armPositions.MID, 2.27);
-    coneGoals.put(armPositions.HIGH, 3.49);
-    coneGoals.put(armPositions.SHELF, 3.52);
-    coneGoals.put(armPositions.SINGLE, 2.27);
+    coneGoals.put(armPositions.STOW, -1.44);
+    coneGoals.put(armPositions.LOW, -1.39);
+    coneGoals.put(armPositions.MID, -0.82);
+    coneGoals.put(armPositions.HIGH, 0.44);
+    coneGoals.put(armPositions.SHELF, 0.44);
+    coneGoals.put(armPositions.SINGLE, -0.87);
 
     // TODO: Set arm cube goals
-    cubeGoals.put(armPositions.STOW, 1.67);
-    cubeGoals.put(armPositions.LOW, 1.75);
-    cubeGoals.put(armPositions.MID, 2.47);
-    cubeGoals.put(armPositions.HIGH, 3.19);
-    cubeGoals.put(armPositions.SHELF, 3.47);
-    cubeGoals.put(armPositions.SINGLE, 2.47);
+    cubeGoals.put(armPositions.STOW, -1.44);
+    cubeGoals.put(armPositions.LOW, -1.39);
+    cubeGoals.put(armPositions.MID, -0.67);
+    cubeGoals.put(armPositions.HIGH, 0.05);
+    cubeGoals.put(armPositions.SHELF, 0.33);
+    cubeGoals.put(armPositions.SINGLE, -0.67);
     ;
     encoder = new DutyCycleEncoder(1);
     encoder.setDistancePerRotation(2 * Math.PI);
-    encoder.setPositionOffset(0.0);
+    encoder.setPositionOffset(0.497);
 
     m_feedforward = new ArmFeedforward(Constants.Arm.kS, Constants.Arm.kG, Constants.Arm.kV);
 

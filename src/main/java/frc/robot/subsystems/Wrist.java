@@ -58,24 +58,24 @@ public class Wrist extends ProfiledPIDSubsystem {
     this.s_RobotState = s_RobotState;
 
     //TODO: Set wrist cube goals
-   cubeGoals.put(wristPositions.STOW, 4.38);
-   cubeGoals.put(wristPositions.LOW, 3.1);
-   cubeGoals.put(wristPositions.MID, 3.95);
-   cubeGoals.put(wristPositions.HIGH, 3.8);
-   cubeGoals.put(wristPositions.SHELF, 3.2);
-   cubeGoals.put(wristPositions.SINGLE, 4.38);
+   cubeGoals.put(wristPositions.STOW, 1.35);
+   cubeGoals.put(wristPositions.LOW, -0.04);
+   cubeGoals.put(wristPositions.MID, 0.81);
+   cubeGoals.put(wristPositions.HIGH, 0.66);
+   cubeGoals.put(wristPositions.SHELF, 0.06);
+   cubeGoals.put(wristPositions.SINGLE, 1.24);
 
    //TODO: Set wrist cone goals
-   coneGoals.put(wristPositions.STOW, 4.38);
-   coneGoals.put(wristPositions.LOW, 3.21);
-   coneGoals.put(wristPositions.MID, 4.05);
-   coneGoals.put(wristPositions.HIGH, 3.47);
-   coneGoals.put(wristPositions.SHELF, 3.39);
-   coneGoals.put(wristPositions.SINGLE, 4.38);
+   coneGoals.put(wristPositions.STOW, 1.35);
+   coneGoals.put(wristPositions.LOW, 0.23);
+   coneGoals.put(wristPositions.MID, 0.91);
+   coneGoals.put(wristPositions.HIGH, 0.54);
+   coneGoals.put(wristPositions.SHELF, 0.35);
+   coneGoals.put(wristPositions.SINGLE, 1.24);
 
     encoder = new DutyCycleEncoder(0);
     encoder.setDistancePerRotation(2 * Math.PI);
-    encoder.setPositionOffset(0.86);
+    encoder.setPositionOffset(0.463);
 
     m_feedforward = new ArmFeedforward(Constants.Wrist.kS, Constants.Wrist.kG, Constants.Wrist.kV);
 
@@ -189,6 +189,7 @@ public class Wrist extends ProfiledPIDSubsystem {
 
     SmartDashboard.putNumber("Wrist angle", getMeasurement());
     SmartDashboard.putNumber("Wrist absolute position", encoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Wrist error", getController().getPositionError());
   }
 
   @Override

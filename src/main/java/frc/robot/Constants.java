@@ -21,7 +21,7 @@ public final class Constants {
 
         //Feedfoward Constants
         public static final double kS = 0.00;
-        public static final double kG = -0.35;
+        public static final double kG = 0.45;
         public static final double kV = 3;
 
         //Trapezodial Profile Constants
@@ -31,7 +31,7 @@ public final class Constants {
 
     public static final class Wrist {
         //PID Constants
-         public static final double kP = 15.0;
+         public static final double kP = 20.0;
          public static final double kI = 0.00;
          public static final double kD = 0.00;
  
