@@ -204,6 +204,9 @@ public class Arm extends ProfiledPIDSubsystem {
 
     if (checkEncoderConnection()) {
       encoderDisconnected = true;
+      disable();
+      motor1.stopMotor();
+      motor2.stopMotor();
       DataLogManager.log("ARM ENCODER DISCONNECTION");
       encoderConnectionLog.append(false);
     } else {
