@@ -196,6 +196,8 @@ public class Wrist extends ProfiledPIDSubsystem {
 
     if (checkEncoderConnection()) {
       encoderDisconnected = true;
+      disable();
+      motor.stopMotor();
       DataLogManager.log("ARM ENCODER DISCONNECTION");
       encoderConnectionLog.append(false);
     } else {
