@@ -11,10 +11,14 @@ import frc.robot.Constants;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.util.datalog.BooleanLogEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.math.controller.ArmFeedforward;
 
 public class Arm extends ProfiledPIDSubsystem {
@@ -31,6 +35,10 @@ public class Arm extends ProfiledPIDSubsystem {
   private double incrementEncoderZero = 0.0;
   private boolean safety = false;
   private boolean encoderDisconnected = false;
+
+  private DataLog log;
+  private BooleanLogEntry encoderConnectionLog;
+  private DoubleLogEntry encoderIncrementLog;
 
   private enum armPositions {
     STOW,
@@ -82,6 +90,12 @@ public class Arm extends ProfiledPIDSubsystem {
     motor2.setInverted(true);
     motor1.setNeutralMode(NeutralMode.Brake);
     motor2.setNeutralMode(NeutralMode.Brake);
+
+    /* Telemetry */
+    log = DataLogManager.getLog();
+
+    encoderConnectionLog = new BooleanLogEntry(log, "/arm");
+    encoderIncrementLog = new DoubleLogEntry(log, "/arm");
   }
 
   private void moveToPos(armPositions pos) {
@@ -190,7 +204,13 @@ public class Arm extends ProfiledPIDSubsystem {
 
     if (checkEncoderConnection()) {
       encoderDisconnected = true;
-      System.out.println("FATAL ERROR: ARM HAS LOST ENCODER CONNECTION");
+      disable();
+      motor1.stopMotor();
+      motor2.stopMotor();
+      DataLogManager.log("ARM ENCODER DISCONNECTION");
+      encoderConnectionLog.append(false);
+    } else {
+      encoderConnectionLog.append(true);
     }
 
     SmartDashboard.putNumber("Arm angle", getMeasurement());
@@ -214,6 +234,7 @@ public class Arm extends ProfiledPIDSubsystem {
     } else if (delta < -0.9 * (2 * Math.PI)) {
       incrementEncoderZero -= (2 * Math.PI);
     }
+    encoderIncrementLog.append(incrementEncoderZero);
   }
 
   private boolean checkEncoderConnection() {
