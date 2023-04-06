@@ -42,7 +42,7 @@ public class Intake extends SubsystemBase {
     }
 
     public boolean hasObject() {
-        if (motor.getStatorCurrent() > 60) {
+        if (motor.getStatorCurrent() > 50) {
             return true;
         } else {
             return false;

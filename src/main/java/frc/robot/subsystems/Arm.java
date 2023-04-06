@@ -65,16 +65,16 @@ public class Arm extends ProfiledPIDSubsystem {
     // TODO: Set arm cone goals
     coneGoals.put(armPositions.STOW, -1.44);
     coneGoals.put(armPositions.LOW, -1.39);
-    coneGoals.put(armPositions.MID, -0.82);
-    coneGoals.put(armPositions.HIGH, 0.44);
-    coneGoals.put(armPositions.SHELF, 0.44);
+    coneGoals.put(armPositions.MID, -0.79);
+    coneGoals.put(armPositions.HIGH, 0.38);
+    coneGoals.put(armPositions.SHELF, 0.46);
     coneGoals.put(armPositions.SINGLE, -0.87);
 
     // TODO: Set arm cube goals
     cubeGoals.put(armPositions.STOW, -1.44);
     cubeGoals.put(armPositions.LOW, -1.39);
-    cubeGoals.put(armPositions.MID, -0.67);
-    cubeGoals.put(armPositions.HIGH, 0.05);
+    cubeGoals.put(armPositions.MID, -0.7);
+    cubeGoals.put(armPositions.HIGH, 0.15);
     cubeGoals.put(armPositions.SHELF, 0.33);
     cubeGoals.put(armPositions.SINGLE, -0.67);
     ;
