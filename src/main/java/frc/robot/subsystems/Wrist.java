@@ -64,7 +64,6 @@ public class Wrist extends ProfiledPIDSubsystem {
 
     this.s_RobotState = s_RobotState;
 
-    //TODO: Set wrist cube goals
    cubeGoals.put(wristPositions.STOW, 1.37);
    cubeGoals.put(wristPositions.LOW, 0.17);
    cubeGoals.put(wristPositions.MID, 0.91);
@@ -72,7 +71,6 @@ public class Wrist extends ProfiledPIDSubsystem {
    cubeGoals.put(wristPositions.SHELF, 0.06);
    cubeGoals.put(wristPositions.SINGLE, 1.24);
 
-   //TODO: Set wrist cone goals
    coneGoals.put(wristPositions.STOW, 1.37);
    coneGoals.put(wristPositions.LOW, 0.23);
    coneGoals.put(wristPositions.MID, 0.91);

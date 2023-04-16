@@ -62,7 +62,6 @@ public class Arm extends ProfiledPIDSubsystem {
 
     this.s_RobotState = s_RobotState;
 
-    // TODO: Set arm cone goals
     coneGoals.put(armPositions.STOW, -1.44);
     coneGoals.put(armPositions.LOW, -1.39);
     coneGoals.put(armPositions.MID, -0.79);
@@ -70,7 +69,6 @@ public class Arm extends ProfiledPIDSubsystem {
     coneGoals.put(armPositions.SHELF, 0.46);
     coneGoals.put(armPositions.SINGLE, -0.87);
 
-    // TODO: Set arm cube goals
     cubeGoals.put(armPositions.STOW, -1.44);
     cubeGoals.put(armPositions.LOW, -1.39);
     cubeGoals.put(armPositions.MID, -0.7);
