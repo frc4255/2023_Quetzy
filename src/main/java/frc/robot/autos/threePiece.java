@@ -43,7 +43,7 @@ public class threePiece extends SequentialCommandGroup {
                     new BottomNode(s_Arm, s_Wrist),
                     new runIntake(s_Intake, m_RobotContainer).repeatedly().withTimeout(0.95),
                     new Stow(s_Arm, s_Wrist),
-                    new WaitCommand(0.5),
+                    new WaitCommand(0.45),
                     new HighNode(s_Arm, s_Wrist)
                 )
             ),

@@ -65,9 +65,9 @@ public class Arm extends ProfiledPIDSubsystem {
     // TODO: Set arm cone goals
     coneGoals.put(armPositions.STOW, -1.44);
     coneGoals.put(armPositions.LOW, -1.39);
-    coneGoals.put(armPositions.MID, -0.79);
+    coneGoals.put(armPositions.MID, -0.89);
     coneGoals.put(armPositions.HIGH, 0.38);
-    coneGoals.put(armPositions.SHELF, 0.46);
+    coneGoals.put(armPositions.SHELF, 0.41);
     coneGoals.put(armPositions.SINGLE, -0.87);
 
     // TODO: Set arm cube goals
@@ -75,12 +75,12 @@ public class Arm extends ProfiledPIDSubsystem {
     cubeGoals.put(armPositions.LOW, -1.39);
     cubeGoals.put(armPositions.MID, -0.7);
     cubeGoals.put(armPositions.HIGH, 0.15);
-    cubeGoals.put(armPositions.SHELF, 0.33);
+    cubeGoals.put(armPositions.SHELF, 0.16);
     cubeGoals.put(armPositions.SINGLE, -0.67);
     ;
     encoder = new DutyCycleEncoder(1);
     encoder.setDistancePerRotation(2 * Math.PI);
-    encoder.setPositionOffset(0.497);
+    encoder.setPositionOffset(0.51);
 
     m_feedforward = new ArmFeedforward(Constants.Arm.kS, Constants.Arm.kG, Constants.Arm.kV);
 

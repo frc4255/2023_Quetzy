@@ -65,24 +65,24 @@ public class Wrist extends ProfiledPIDSubsystem {
     this.s_RobotState = s_RobotState;
 
     //TODO: Set wrist cube goals
-   cubeGoals.put(wristPositions.STOW, 1.37);
-   cubeGoals.put(wristPositions.LOW, 0.17);
-   cubeGoals.put(wristPositions.MID, 0.91);
+   cubeGoals.put(wristPositions.STOW, 1.39);
+   cubeGoals.put(wristPositions.LOW, 0.16);
+   cubeGoals.put(wristPositions.MID, 0.88);
    cubeGoals.put(wristPositions.HIGH, 0.87);
-   cubeGoals.put(wristPositions.SHELF, 0.06);
+   cubeGoals.put(wristPositions.SHELF, 0.34);
    cubeGoals.put(wristPositions.SINGLE, 1.24);
 
    //TODO: Set wrist cone goals
-   coneGoals.put(wristPositions.STOW, 1.37);
-   coneGoals.put(wristPositions.LOW, 0.23);
-   coneGoals.put(wristPositions.MID, 0.91);
+   coneGoals.put(wristPositions.STOW, 1.39);
+   coneGoals.put(wristPositions.LOW, 0.24);
+   coneGoals.put(wristPositions.MID, 1.15);
    coneGoals.put(wristPositions.HIGH, 0.54);
-   coneGoals.put(wristPositions.SHELF, 0.35);
+   coneGoals.put(wristPositions.SHELF, 0.34);
    coneGoals.put(wristPositions.SINGLE, 1.24);
 
     encoder = new DutyCycleEncoder(0);
     encoder.setDistancePerRotation(2 * Math.PI);
-    encoder.setPositionOffset(0.463);
+    encoder.setPositionOffset(0.512);
 
     m_feedforward = new ArmFeedforward(Constants.Wrist.kS, Constants.Wrist.kG, Constants.Wrist.kV);
 
