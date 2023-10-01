@@ -27,10 +27,6 @@ public class Intake extends SubsystemBase {
         motor.set(ControlMode.PercentOutput, -0.7);
     }
 
-    public void sendIt() {
-        motor.set(ControlMode.PercentOutput, -0.35);
-    }
-
     public void stop() {
         if (s_RobotState.getCurrentState() == State.CONE) {
             motor.set(ControlMode.PercentOutput, -0.07);

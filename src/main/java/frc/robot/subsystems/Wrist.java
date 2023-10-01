@@ -77,12 +77,12 @@ public class Wrist extends ProfiledPIDSubsystem {
    coneGoals.put(wristPositions.LOW, 0.24);
    coneGoals.put(wristPositions.MID, 1.15);
    coneGoals.put(wristPositions.HIGH, 0.54);
-   coneGoals.put(wristPositions.SHELF, 0.34);
+   coneGoals.put(wristPositions.SHELF, 0.38);
    coneGoals.put(wristPositions.SINGLE, 1.24);
 
     encoder = new DutyCycleEncoder(0);
     encoder.setDistancePerRotation(2 * Math.PI);
-    encoder.setPositionOffset(0.512);
+    encoder.setPositionOffset(0.428);
 
     m_feedforward = new ArmFeedforward(Constants.Wrist.kS, Constants.Wrist.kG, Constants.Wrist.kV);
 
@@ -155,7 +155,7 @@ public class Wrist extends ProfiledPIDSubsystem {
         goalPos = goal.get(wristPositions.SINGLE);
     } 
 
-    if (Math.abs(getMeasurement() - goalPos) < 0.06 || getMeasurement() == goalPos) {
+    if (Math.abs(getMeasurement() - goalPos) < 0.08 || getMeasurement() == goalPos) {
       return true;
     } else {
       return false;

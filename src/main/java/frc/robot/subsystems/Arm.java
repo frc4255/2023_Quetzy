@@ -62,15 +62,13 @@ public class Arm extends ProfiledPIDSubsystem {
 
     this.s_RobotState = s_RobotState;
 
-    // TODO: Set arm cone goals
     coneGoals.put(armPositions.STOW, -1.44);
     coneGoals.put(armPositions.LOW, -1.39);
     coneGoals.put(armPositions.MID, -0.89);
     coneGoals.put(armPositions.HIGH, 0.38);
-    coneGoals.put(armPositions.SHELF, 0.41);
+    coneGoals.put(armPositions.SHELF, 0.48);
     coneGoals.put(armPositions.SINGLE, -0.87);
 
-    // TODO: Set arm cube goals
     cubeGoals.put(armPositions.STOW, -1.44);
     cubeGoals.put(armPositions.LOW, -1.39);
     cubeGoals.put(armPositions.MID, -0.7);
@@ -156,7 +154,7 @@ public class Arm extends ProfiledPIDSubsystem {
         goalPos = goal.get(armPositions.SINGLE);
     }
 
-    if (Math.abs(encoder.getDistance() - goalPos) < 0.04 || encoder.getDistance() == goalPos) {
+    if (Math.abs(encoder.getDistance() - goalPos) < 0.06 || encoder.getDistance() == goalPos) {
       return true;
     } else {
       return false;
