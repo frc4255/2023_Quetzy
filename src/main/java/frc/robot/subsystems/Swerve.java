@@ -126,8 +126,8 @@ public class Swerve extends SubsystemBase {
                 traj,
                 this::getPose, // Pose supplier
                 Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
-                new PIDController(3.4, 0, 0), // X PID
-                new PIDController(3.4, 0, 0), //Y PID
+                new PIDController(3.5, 0, 0), // X PID
+                new PIDController(3.5, 0, 0), //Y PID
                 new PIDController(4.75, 0, 0), //Rotation PID.
                 this::setModuleStates, //Module states consumer
                 true, //Path mirroring
@@ -159,8 +159,12 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("Gyro Pitch", getPitch());
         SmartDashboard.putNumber("Gyro Roll", getRoll());
         SmartDashboard.putNumber("Gyro roll w/ offset", 360 - getRoll());
+        SmartDashboard.putNumber("Robot Pose X", getPose().getX());
+        SmartDashboard.putNumber("Robot Pose Y", getPose().getY());
+        SmartDashboard.putNumber("Robot Pose Theta", getPose().getRotation().getDegrees());
 
         for (SwerveModule mod : mSwerveMods) {
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Delta Angle", mod.getDeltaAngle());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getPosition().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);

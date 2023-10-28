@@ -65,24 +65,24 @@ public class Wrist extends ProfiledPIDSubsystem {
     this.s_RobotState = s_RobotState;
 
     //TODO: Set wrist cube goals
-   cubeGoals.put(wristPositions.STOW, 1.39);
-   cubeGoals.put(wristPositions.LOW, 0.16);
+   cubeGoals.put(wristPositions.STOW, 1.29);
+   cubeGoals.put(wristPositions.LOW, 0.03);
    cubeGoals.put(wristPositions.MID, 0.88);
    cubeGoals.put(wristPositions.HIGH, 0.87);
    cubeGoals.put(wristPositions.SHELF, 0.34);
    cubeGoals.put(wristPositions.SINGLE, 1.24);
 
    //TODO: Set wrist cone goals
-   coneGoals.put(wristPositions.STOW, 1.39);
-   coneGoals.put(wristPositions.LOW, 0.24);
-   coneGoals.put(wristPositions.MID, 1.15);
-   coneGoals.put(wristPositions.HIGH, 0.54);
-   coneGoals.put(wristPositions.SHELF, 0.38);
+   coneGoals.put(wristPositions.STOW, 1.29);
+   coneGoals.put(wristPositions.LOW, 0.1); //Was 0.23
+   coneGoals.put(wristPositions.MID, 1.0);
+   coneGoals.put(wristPositions.HIGH, 0.52);
+   coneGoals.put(wristPositions.SHELF, 0.3);
    coneGoals.put(wristPositions.SINGLE, 1.24);
 
     encoder = new DutyCycleEncoder(0);
     encoder.setDistancePerRotation(2 * Math.PI);
-    encoder.setPositionOffset(0.428);
+    encoder.setPositionOffset(0.49);
 
     m_feedforward = new ArmFeedforward(Constants.Wrist.kS, Constants.Wrist.kG, Constants.Wrist.kV);
 
